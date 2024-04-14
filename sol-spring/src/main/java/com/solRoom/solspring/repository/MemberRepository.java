@@ -1,10 +1,13 @@
 package com.solRoom.solspring.repository;
 
 import com.solRoom.solspring.domain.Member;
-import org.springframework.stereotype.Repository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-@Repository
-public interface MemberRepository {
-    Member save(Member member);
+
+public interface MemberRepository extends JpaRepository<Member, Long> {
+    //<Optional>Member findByEmail(String email);
+    boolean existsByEmail(String email);
     Member findByEmail(String email);
+
 }
+
