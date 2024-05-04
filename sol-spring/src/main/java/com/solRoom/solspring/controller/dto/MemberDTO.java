@@ -45,6 +45,7 @@ public class MemberDTO {
                     .name(name)
                     .password(password)
                     .email(email)
+                    .address(address)
                     .build();
         }
 
