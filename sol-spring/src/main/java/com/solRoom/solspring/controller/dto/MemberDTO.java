@@ -29,8 +29,10 @@ public class MemberDTO {
         @NotBlank(message = "이름을 입력해주세요.")
         private String name;
 
+        @NotBlank(message = "주소를 입력해주세요.")
         private String address;
         private String confirmPassword;
+
 
         /* 암호화된 password */
         public void encryptPassword(String BCryptpassword) {
@@ -38,7 +40,6 @@ public class MemberDTO {
         }
 
         /* DTO -> Entity */
-
         public Member toEntity() {
             return Member.builder()
                     .id(id)
