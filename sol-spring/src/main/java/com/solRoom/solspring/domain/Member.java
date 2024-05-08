@@ -2,13 +2,16 @@ package com.solRoom.solspring.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.CreationTimestamp;
 
-@Entity
-@Getter
-@Setter
+
+import java.sql.Timestamp;
+@Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Entity
 public class Member {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -23,14 +26,11 @@ public class Member {
     @Column(nullable = false)
     private String address;
 
-    private String confirmPassword;
+    @CreationTimestamp
+    private Timestamp createDate;
 
-//    @Enumerated(EnumType.STRING)
-//    private GrantedAuthority role;
-
-
-
-
+    @Enumerated(EnumType.STRING)
+    private RoleType role;
 
 
 }

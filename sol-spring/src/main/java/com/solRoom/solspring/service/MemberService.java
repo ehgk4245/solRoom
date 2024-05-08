@@ -2,6 +2,7 @@ package com.solRoom.solspring.service;
 
 import com.solRoom.solspring.controller.dto.MemberDTO;
 import com.solRoom.solspring.domain.Member;
+import com.solRoom.solspring.domain.RoleType;
 import com.solRoom.solspring.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +13,9 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.FieldError;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -23,22 +26,23 @@ public class MemberService {
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
+
+
     public Member join(MemberDTO.RequestMemberDTO memberDTO) {
-        validateDuplicateMember(memberDTO);
         memberDTO.encryptPassword(bCryptPasswordEncoder.encode(memberDTO.getPassword()));
         Member member = memberDTO.toEntity();
+        member.setRole(RoleType.USER);
         return memberRepository.save(member);
 
-
     }
 
-    private void validateDuplicateMember(MemberDTO.RequestMemberDTO memberDTO) {
-        Member findMember = memberRepository.findByEmail(memberDTO.getEmail());
-        if(findMember != null){
-            throw new IllegalStateException("이미 가입된 회원입니다.");
+    public boolean isDuplicateEmail(MemberDTO.RequestMemberDTO memberDTO) {
+        Optional<Member> findMember = memberRepository.findByEmail(memberDTO.getEmail());
+        if(findMember.isPresent()){
+            return true;
         }
+        return false;
     }
-
 
     public Map<String, String> validateHandling(Errors errors) {
         Map<String,String>validatorResult = new HashMap<>();
