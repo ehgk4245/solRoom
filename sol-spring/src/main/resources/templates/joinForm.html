@@ -19,7 +19,6 @@
     <div class="logo">
         <div><a href="home.html"><img src="/album/logo.jpg"></a></div>
     </div>
-
 </header>
 
 <div class="container mt-5">
@@ -30,21 +29,21 @@
                     회원가입
                 </div>
                 <div class="card-body">
-                    <form action="/newMember" th:object="${member}" method="post" onsubmit="return validateForm()">
+                    <form id="registrationForm" action="/newMember" th:object="${member}" method="post">
+                        <!-- 폼 요소들 -->
                         <div class="mb-3">
                             <label for="username" class="form-label">사용자 이름</label>
                             <input type="text" class="form-control" id="username" th:field="*{name}"
                                    placeholder="사용자 이름을 입력하세요">
                             <!-- 에러 메시지 -->
                             <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="valid-message"></span>
-
                         </div>
                         <div class="mb-3">
                             <label for="email" class="form-label">이메일 주소</label>
                             <div class="input-group">
                                 <input type="email" class="form-control" id="email" th:field="*{email}"
                                        placeholder="이메일 주소를 입력하세요">
-                                <button type="button" class="btn btn-outline-secondary" onclick="checkDuplicateEmail()">
+                                <button type="button" id="emailCheckBtn" class="btn btn-outline-secondary">
                                     이메일 중복 확인
                                 </button>
                             </div>
@@ -79,7 +78,7 @@
                             <label class="form-check-label" for="agree">약관에 동의합니다.</label>
                         </div>
 
-                        <button type="submit" class="btn btn-primary">가입하기</button>
+                        <button type="submit" class="btn btn-primary" onclick="showSuccessMessageAndRedirect()">가입하기</button>
                     </form>
                     <div id="emailCheckResult"></div>
                 </div>
@@ -91,17 +90,17 @@
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         crossorigin="anonymous"></script>
 <script>
-    function validateForm() {
-       var password = document.getElementById("password").value;
-       var confirmPassword = document.getElementById("confirmPassword").value;
-       if (password != confirmPassword) {
-           document.getElementById("confirmPasswordError").innerText = "비밀번호가 일치하지 않습니다.";
-           return false;
-       }
-       return true;
-   }
+    // 폼 제출 이벤트 핸들러
+    $("#registrationForm").submit(function(event) {
+        // 폼 데이터 유효성 검사
+        if (!validateForm()) {
+            event.preventDefault(); // 폼 제출 막기
+            return false;
+        }
+    });
 
-   function checkDuplicateEmail() {
+    // 이메일 중복 확인 함수
+    function checkDuplicateEmail() {
         var email = document.getElementById("email").value;
         // AJAX를 통해 서버로 이메일 중복 확인 요청 보내기
         $.ajax({
@@ -118,38 +117,28 @@
             }
         });
     }
+
+    // 이메일 중복 확인 버튼 클릭 이벤트 핸들러
     $(document).ready(function() {
-        // 회원가입이 완료되었을 때 알림창을 띄우고 메인 페이지로 이동하는 함수
-        function showSuccessMessageAndRedirect() {
-            alert("회원가입이 완료되었습니다.");
-            window.location.href = "/"; // mainPage는 실제 메인 페이지 URL에 맞게 수정
-        }
-
-        $("form").submit(function(event) {
-            if (!validateForm()) {
-                event.preventDefault(); // 폼 전송을 막음
-                return false; // 함수 종료
-            }
-
-            // 폼 데이터를 AJAX로 서버에 전송
-            $.ajax({
-                type: $(this).attr("method"),
-                url: $(this).attr("action"),
-                data: $(this).serialize(),
-                success: function(response) {
-                    // 서버에서의 응답에 따라 결과 처리
-                    showSuccessMessageAndRedirect();
-                },
-                error: function() {
-                    alert("서버 오류가 발생했습니다.");
-                }
-            });
-        });
+        $("#emailCheckBtn").click(checkDuplicateEmail);
     });
 
+    // 폼 유효성 검사 함수
+    function validateForm() {
+        var password = document.getElementById("password").value;
+        var confirmPassword = document.getElementById("confirmPassword").value;
+        if (password != confirmPassword) {
+            document.getElementById("confirmPasswordError").innerText = "비밀번호가 일치하지 않습니다.";
+            return false;
+        }
+        return true;
+    }
 
+    // 회원가입 완료 메시지와 리다이렉트 함수
+    function showSuccessMessageAndRedirect() {
+        alert("회원가입이 완료되었습니다.");
+        window.location.href = "/"; // 메인 페이지로 이동
+    }
 </script>
-
-
 </body>
 </html>

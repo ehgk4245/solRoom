@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>게시판 목록</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            text-align: center;
+            margin-top: 20px;
+            color: #333;
+        }
+
+        table {
+            width: 80%;
+            margin: 0 auto;
+            border-collapse: collapse;
+            background-color: #fff;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        tr:hover {
+            background-color: #f9f9f9;
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            list-style: none;
+            padding: 0;
+        }
+
+        .pagination li {
+            margin: 0 5px;
+        }
+
+        .pagination li a {
+            text-decoration: none;
+            color: #333;
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            background-color: #fff;
+            transition: background-color 0.3s ease;
+        }
+
+        .pagination li a:hover {
+            background-color: #f2f2f2;
+        }
+
+        .current-page {
+            background-color: #007bff;
+            color: #fff;
+        }
+
+        .disabled a {
+            pointer-events: none;
+            color: #999;
+            cursor: default;
+        }
+    </style>
+</head>
+<body>
+<h1>게시판 목록</h1>
+<table>
+    <thead>
+    <tr>
+        <th>번호</th>
+        <th>제목</th>
+        <th>게시물 내용</th>
+        <th>상세보기</th>
+    </tr>
+    </thead>
+    <tbody>
+    <!-- 게시판 목록을 반복해서 출력 -->
+    <tr th:each="board : ${boards.content}">
+        <td th:text="${board.id}">게시물 번호</td>
+        <td th:text="${board.title}">게시물 제목</td>
+        <td th:utext="${#strings.replace(board.content, '<[^>]*>', '')}">게시물 내용</td>
+        <td><a th:href="@{'/board/' + ${board.id}}">상세보기</a></td>
+    </tr>
+    </tbody>
+</table>
+<ul class="pagination">
+    <li class="page-item" th:classappend="${boards.first ? 'disabled' : ''}">
+        <a class="page-link" th:if="${!boards.first}" th:href="@{'?page=0'}">First</a>
+    </li>
+    <li class="page-item" th:classappend="${boards.first ? 'disabled' : ''}">
+        <a class="page-link" th:if="${!boards.first}" th:href="@{'?page=' + ${boards.number - 1}}">Previous</a>
+    </li>
+    <li th:each="i : ${#numbers.sequence(boards.number - 2, boards.number + 2)}" th:if="${i >= 0 and i < boards.totalPages}"
+        th:classappend="${i == boards.number ? 'active current-page' : ''}">
+        <a class="page-link" th:href="@{'?page=' + ${i}}">[[${i + 1}]]</a>
+    </li>
+    <li class="page-item" th:classappend="${boards.last ? 'disabled' : ''}">
+        <a class="page-link" th:if="${!boards.last}" th:href="@{'?page=' + ${boards.number + 1}}">Next</a>
+    </li>
+    <li class="page-item" th:classappend="${boards.last ? 'disabled' : ''}">
+        <a class="page-link" th:if="${!boards.last}" th:href="@{'?page=' + ${boards.totalPages - 1}}">Last</a>
+    </li>
+</ul>
+</body>
+</html>

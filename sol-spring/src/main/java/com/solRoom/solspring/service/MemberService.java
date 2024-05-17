@@ -4,6 +4,7 @@ import com.solRoom.solspring.controller.dto.MemberDTO;
 import com.solRoom.solspring.domain.Member;
 import com.solRoom.solspring.domain.RoleType;
 import com.solRoom.solspring.repository.MemberRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
