@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.sql.Timestamp;
@@ -25,17 +24,16 @@ public class Board {
     @Column(nullable = false)
     private String title;
 
-    @Lob // 대용량 데이터
-    private String content;
+    @Column(columnDefinition = "longblob")
+    private String content; // 이미지 파일을 저장할 byte 배열
 
-    @ColumnDefault("0")
     private int count;
 
-    @ManyToOne(fetch = FetchType.EAGER) //Many = Board, One = Member
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="memberId")
-    private Member member;  // DB는 오브젝트를 저장할 수 없다. FK
+    private Member member;
 
-    @OneToMany(mappedBy = "board",fetch = FetchType.EAGER) // DB에 컬럼으로 만들어지지 않음
+    @OneToMany(mappedBy = "board",fetch = FetchType.EAGER)
     private List<Reply> reply;
 
     @CreationTimestamp

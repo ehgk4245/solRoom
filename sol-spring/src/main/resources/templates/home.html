@@ -32,7 +32,10 @@
                         <a th:href="@{'/'}">마이페이지</a>
                     </li>
                     <li class="breadcrumb-item" sec:authorize="hasRole('USER')">
-                        <a th:href="@{'/'}">찾아보기</a>
+                        <a th:href="@{'../board/saveForm'}">글쓰기</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a th:href="@{'/../board/boardList'}" sec:authorize="isAuthenticated()">자유게시판</a>
                     </li>
                     <li class="breadcrumb-item">
                         <a th:href="@{/util/register}" sec:authorize="hasRole('ADMIN')">등록하기</a>
