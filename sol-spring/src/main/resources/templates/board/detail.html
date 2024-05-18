@@ -115,14 +115,14 @@
     </div>
     <div th:if="${board.member.id == #authentication.principal.member.id}">
         <button id="btn-update" class="btn btn-warning">수정</button>
-        <button type="button" onclick="deleteBoard();" class="btn btn-danger">삭제</button>
+        <button class="btn btn-danger" onclick="deleteBoard()" >삭제</button>
     </div>
 
 </div>
 
 <script>
     function deleteBoard() {
-                const id = ${board.id};
+                const id = [[ ${board.id} ]];
 
                 if ( !confirm(id + '번 게시글을 삭제할까요?') ) {
                     return false;

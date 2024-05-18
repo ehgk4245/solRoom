@@ -74,9 +74,37 @@
             color: #999;
             cursor: default;
         }
+
+        .back-button {
+            display: block;
+            width: 80%;
+            margin: 20px auto;
+            text-align: right;
+        }
+
+        .back-button button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .back-button button:hover {
+            background-color: #0056b3;
+        }
     </style>
 </head>
 <body>
+
+<div class="back-button">
+    <a th:href="@{'../board/saveForm'}">글쓰기</a>
+    <button onclick="window.location.href='/'">뒤로 가기</button>
+</div>
+
+
 <h1>게시판 목록</h1>
 <table>
     <thead>
