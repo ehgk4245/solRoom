@@ -1,7 +1,5 @@
 package com.solRoom.solspring.domain;
 
-
-import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,29 +8,35 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.sql.Timestamp;
+import java.util.List;
 
-@Builder
-@Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Data
+@Builder
 @Entity
-public class Reply {
+public class FreeBoard {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, length=200)
-    private String content;
+    @Column(nullable = false)
+    private String title;
 
-    @ManyToOne //한 board에 여러개의 reply
-    @JoinColumn(name="boardId")
-    private Board board;
+    @Column(columnDefinition = "longblob")
+    private String content; // 이미지 파일을 저장할 byte 배열
 
-    @ManyToOne
-    @JoinColumn(name = "memberId")
+    private int count;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name="memberId")
     private Member member;
+
+    @OneToMany(mappedBy = "board",fetch = FetchType.EAGER)
+    private List<FreeBoardReply> reply;
 
     @CreationTimestamp
     private Timestamp createDate;
+
 }
