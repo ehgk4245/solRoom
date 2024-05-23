@@ -1,5 +1,6 @@
 package com.solRoom.solspring.service;
 
+import com.solRoom.solspring.controller.dto.FreeBoardDTO;
 import com.solRoom.solspring.domain.FreeBoard;
 import com.solRoom.solspring.domain.Member;
 import org.springframework.data.domain.Page;
@@ -12,6 +13,8 @@ public interface BoardService {
 
     FreeBoard viewDetail(Long id);  // 글 상세보기
 
-    void deleteBoard(Long id);  // 글 삭제
+    void deleteBoard(Long id); // 글 삭제
+    
+    void updateBoard(Long id, FreeBoardDTO boardDTO); // 글 수정
 
 }

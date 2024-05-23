@@ -53,5 +53,18 @@ public class FreeBoardController {
         return "redirect:/freeBoard/boardList";
     }
 
+    @GetMapping("/updateForm/{Id}")
+    public String updateForm(@PathVariable("Id") Long Id, Model model){
+        FreeBoard board = boardService.viewDetail(Id);
+        model.addAttribute("boardDTO", new FreeBoardDTO(board));
+        return "/freeBoard/updateForm";
+    }
+
+    @PostMapping("/update/{Id}")
+    public String update(@PathVariable("Id") Long Id, FreeBoardDTO boardDTO){
+        System.out.println(Id);
+        boardService.updateBoard(Id, boardDTO);
+        return "redirect:/freeBoard/boardList";
+    }
 
 }
