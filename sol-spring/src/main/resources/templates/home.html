@@ -14,7 +14,7 @@
 <header>
     <div class="container">
         <div class="logo">
-            <div><a href="home.html"><img src="/album/logo.jpg"></a></div>
+            <div><a href="/"><img src="/album/logo.jpg"></a></div>
         </div>
         <div class="user-options">
             <nav aria-label="breadcrumb">
@@ -32,10 +32,10 @@
                         <a th:href="@{'/'}">마이페이지</a>
                     </li>
                     <li class="breadcrumb-item" sec:authorize="hasRole('USER')">
-                        <a th:href="@{'../board/saveForm'}">글쓰기</a>
+                        <a th:href="@{'../freeBoard/saveForm'}">글쓰기</a>
                     </li>
                     <li class="breadcrumb-item">
-                        <a th:href="@{'/../board/boardList'}" sec:authorize="isAuthenticated()">자유게시판</a>
+                        <a th:href="@{'/../freeBoard/boardList'}" sec:authorize="isAuthenticated()">자유게시판</a>
                     </li>
                     <li class="breadcrumb-item">
                         <a th:href="@{/util/register}" sec:authorize="hasRole('ADMIN')">등록하기</a>

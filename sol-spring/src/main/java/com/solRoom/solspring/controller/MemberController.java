@@ -28,14 +28,10 @@ public class MemberController {
     @Autowired
     private  final MemberService memberService;
 
-
-
-
     //-----------------회원가입----------------------
     @PostMapping("/checkDuplicateEmail")
     public ResponseEntity<Map<String, Boolean>> checkDuplicateEmail(@RequestParam("email") String email) {
         boolean isDuplicate = memberService.checkDuplicateEmail(email);
-
         Map<String, Boolean> response = new HashMap<>();
         response.put("duplicate", isDuplicate);
         return ResponseEntity.ok(response);
@@ -56,7 +52,6 @@ public class MemberController {
             model.addAttribute("member",memberDTO);
             return "joinForm";
         }
-
         // 이메일 중복 검사
         if (memberService.isDuplicateEmail(memberDTO)) {
             // 중복된 이메일이 있는 경우 회원가입 폼으로 리다이렉트하고 에러 메시지를 전달
@@ -70,18 +65,10 @@ public class MemberController {
         return "redirect:/login";
     }
 
-
     @GetMapping("/login")
     public String loginForm(){
 
         return "loginForm";
-    }
-
-    @GetMapping("/test")
-    public String test(@AuthenticationPrincipal CustomUserDetails userPrincipal){
-        System.out.println(userPrincipal.getAuthorities());
-        System.out.println(userPrincipal.getMember());
-        return "home";
     }
 
 }

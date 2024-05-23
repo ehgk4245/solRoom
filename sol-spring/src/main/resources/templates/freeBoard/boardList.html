@@ -74,14 +74,42 @@
             color: #999;
             cursor: default;
         }
+
+        .back-button {
+            display: block;
+            width: 80%;
+            margin: 20px auto;
+            text-align: right;
+        }
+
+        .back-button button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .back-button button:hover {
+            background-color: #0056b3;
+        }
     </style>
 </head>
 <body>
+
+<div class="back-button">
+    <a th:href="@{'../freeBoard/saveForm'}">글쓰기</a>
+    <button onclick="window.location.href='/'">뒤로 가기</button>
+</div>
+
+
 <h1>게시판 목록</h1>
 <table>
     <thead>
     <tr>
-        <th>번호</th>
+        <th>작성자</th>
         <th>제목</th>
         <th>게시물 내용</th>
         <th>상세보기</th>
@@ -90,10 +118,10 @@
     <tbody>
     <!-- 게시판 목록을 반복해서 출력 -->
     <tr th:each="board : ${boards.content}">
-        <td th:text="${board.id}">게시물 번호</td>
+        <td th:text="${board.member.nickname}">작성자</td>
         <td th:text="${board.title}">게시물 제목</td>
         <td th:utext="${#strings.replace(board.content, '<[^>]*>', '')}">게시물 내용</td>
-        <td><a th:href="@{'/board/' + ${board.id}}">상세보기</a></td>
+        <td><a th:href="@{'/freeBoard/' + ${board.id}}">상세보기</a></td>
     </tr>
     </tbody>
 </table>

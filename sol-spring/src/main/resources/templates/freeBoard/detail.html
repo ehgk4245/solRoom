@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>게시물 상세보기</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 80%;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .board-content {
+            margin-bottom: 20px;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+        }
+
+        .back-button {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .back-button button {
+            margin-right: 10px;
+        }
+
+        .btn {
+            display: inline-block;
+            font-weight: 400;
+            color: #212529;
+            text-align: center;
+            vertical-align: middle;
+            cursor: pointer;
+            border: 1px solid transparent;
+            padding: .375rem .75rem;
+            font-size: 1rem;
+            line-height: 1.5;
+            border-radius: .25rem;
+            transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+        }
+
+        .btn-secondary {
+            color: #fff;
+            background-color: #6c757d;
+            border-color: #6c757d;
+        }
+
+        .btn-secondary:hover {
+            color: #fff;
+            background-color: #5a6268;
+            border-color: #545b62;
+        }
+
+        .btn-warning {
+            color: #212529;
+            background-color: #ffc107;
+            border-color: #ffc107;
+        }
+
+        .btn-warning:hover {
+            color: #212529;
+            background-color: #e0a800;
+            border-color: #d39e00;
+        }
+
+        .btn-danger {
+            color: #fff;
+            background-color: #dc3545;
+            border-color: #dc3545;
+        }
+
+        .btn-danger:hover {
+            color: #fff;
+            background-color: #c82333;
+            border-color: #bd2130;
+        }
+
+        .comment-section {
+            margin-top: 30px;
+        }
+
+        .comment-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .comment {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .comment .content {
+            margin-bottom: 5px;
+        }
+
+        .comment .actions {
+            display: flex;
+            justify-content: space-between;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>게시물 상세보기</h1>
+    <div class="board-content">
+        <h2>게시물 제목: <span th:text="${board.title}">제목 없음</span></h2>
+        <h3>작성자: <span th:text="${board.member.nickname}">작성자 없음</span></h3>
+        <p th:utext="${#strings.replace(board.content, '<[^>]*>', '')}">게시물 내용</p>
+    </div>
+
+    <div class="back-button">
+        <button class="btn btn-secondary" onclick="history.back()">돌아가기</button>
+    </div>
+    <div th:if="${board.member.id == #authentication.principal.member.id}">
+        <button id="btn-update" class="btn btn-warning">수정</button>
+        <button class="btn btn-danger" onclick="deleteBoard()">삭제</button>
+    </div>
+
+
+    <!-- 댓글 작성 폼 -->
+    <div class="card my-4">
+        <h5 class="card-header">댓글 작성</h5>
+        <div class="card-body">
+            <form th:action="@{/freeBoard/{id}/save(id=${board.id})}" th:method="post" th:object="${replyDTO}">
+                <input type="hidden" th:field="*{id}" />
+                <div class="form-group" style="margin-bottom: 10px;">
+                    <textarea class="form-control" th:field="*{content}" rows="3" placeholder="댓글을 입력하세요"></textarea>
+                    <div class="text-danger" th:if="${#fields.hasErrors('content')}" th:errors="*{content}"></div>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+    </div>
+    <!-- 기존 댓글 목록 -->
+    <div class="comments">
+        <h5>댓글 목록</h5>
+        <div th:each="reply : ${board.reply}">
+            <div class="comment">
+                <p th:text="${reply.content}">댓글 내용</p>
+                <small th:text="${reply.member.nickname}">작성자</small>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function deleteBoard() {
+        const id = [[${board.id}]];
+        if (!confirm(id + '번 게시글을 삭제할까요?')) {
+            return false;
+        }
+        const formHtml = `
+            <form id="deleteForm" action="/freeBoard/delete" method="post">
+                <input type="hidden" id="id" name="id" value="${id}" />
+            </form>
+        `;
+        const doc = new DOMParser().parseFromString(formHtml, 'text/html');
+        const form = doc.body.firstChild;
+        document.body.append(form);
+        document.getElementById('deleteForm').submit();
+    }
+
+    function deleteReply(replyId) {
+        if (!confirm('댓글을 삭제할까요?')) {
+            return false;
+        }
+        const formHtml = `
+            <form id="deleteReplyForm" action="/replies/delete" method="post">
+                <input type="hidden" id="replyId" name="replyId" value="${replyId}" />
+                <input type="hidden" id="boardId" name="boardId" value="${board.id}" />
+            </form>
+        `;
+        const doc = new DOMParser().parseFromString(formHtml, 'text/html');
+        const form = doc.body.firstChild;
+        document.body.append(form);
+        document.getElementById('deleteReplyForm').submit();
+    }
+
+    function saveReply() {
+        const content = document.getElementById('replyContent').value;
+        if (!content) {
+            alert('댓글 내용을 입력해주세요.');
+            return false;
+        }
+        const formHtml = `
+            <form id="saveReplyForm" action="/replies/save" method="post">
+                <input type="hidden" id="boardId" name="boardId" value="${board.id}" />
+                <input type="hidden" id="content" name="content" value="${content}" />
+            </form>
+        `;
+        const doc = new DOMParser().parseFromString(formHtml, 'text/html');
+        const form = doc.body.firstChild;
+        document.body.append(form);
+        document.getElementById('saveReplyForm').submit();
+    }
+</script>
+</body>
+</html>
