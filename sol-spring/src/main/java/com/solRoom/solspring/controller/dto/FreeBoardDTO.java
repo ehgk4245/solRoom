@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Builder
 @Data
@@ -35,4 +36,16 @@ public class FreeBoardDTO {
                 .createDate(createDate)
                 .build();
     }
+
+    /* Entity -> DTO */
+    public FreeBoardDTO(FreeBoard board) {
+        this.id = board.getId();
+        this.title = board.getTitle();
+        this.content = board.getContent();
+        this.count = board.getCount();
+        this.memberId = board.getMember().getId();
+        this.memberNickname = board.getMember().getNickname();
+        this.createDate = board.getCreateDate();
+    }
 }
+

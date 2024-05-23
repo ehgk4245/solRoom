@@ -135,7 +135,7 @@
         <button class="btn btn-secondary" onclick="history.back()">돌아가기</button>
     </div>
     <div th:if="${board.member.id == #authentication.principal.member.id}">
-        <button id="btn-update" class="btn btn-warning">수정</button>
+        <button id="btn-update" class="btn btn-warning" onclick="goToUpdate()">수정</button>
         <button class="btn btn-danger" onclick="deleteBoard()">삭제</button>
     </div>
 
@@ -214,6 +214,11 @@
         const form = doc.body.firstChild;
         document.body.append(form);
         document.getElementById('saveReplyForm').submit();
+    }
+
+    function goToUpdate() {
+        const id = [[${board.id}]];
+        window.location.href = '/freeBoard/updateForm/' + id;
     }
 </script>
 </body>
