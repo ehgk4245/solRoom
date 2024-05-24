@@ -129,6 +129,8 @@
         <h2>게시물 제목: <span th:text="${board.title}">제목 없음</span></h2>
         <h3>작성자: <span th:text="${board.member.nickname}">작성자 없음</span></h3>
         <p th:utext="${#strings.replace(board.content, '<[^>]*>', '')}">게시물 내용</p>
+        <p>조회수: <span th:text="${board.viewCount}">0</span></p>
+        <p>좋아요 수: <span th:text="${board.likeCount}">0</span></p>
     </div>
 
     <div class="back-button">
@@ -139,6 +141,17 @@
         <button class="btn btn-danger" onclick="deleteBoard()">삭제</button>
     </div>
 
+    <!-- 좋아요 버튼 -->
+    <form th:if="${!liked}" th:action="@{/freeBoard/{boardId}/like(boardId=${board.id})}" method="post" style="display: inline;">
+        <button type="submit" class="btn btn-like"
+                th:classappend="${liked} ? 'btn-like-liked' : 'btn-like-default'"
+                th:text="${liked} ? '좋아요 취소' : '좋아요'"></button>
+    </form>
+    <form th:if="${liked}" th:action="@{/freeBoard/{boardId}/unlike(boardId=${board.id})}" method="post" style="display: inline;">
+        <button type="submit" class="btn btn-like"
+                th:classappend="${liked} ? 'btn-like-liked' : 'btn-like-default'"
+                th:text="${liked} ? '좋아요 취소' : '좋아요'"></button>
+    </form>
 
     <!-- 댓글 작성 폼 -->
     <div class="card my-4">
@@ -215,6 +228,23 @@
         document.body.append(form);
         document.getElementById('saveReplyForm').submit();
     }
+
+    function likePost(boardId) {
+        fetch(`/${boardId}/like`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({})
+        }).then(response => {
+            if (response.ok) {
+                window.location.reload(); // 좋아요 후 페이지 새로고침
+            } else {
+                alert('Failed to like the post');
+            }
+        }).catch(error => {
+            console.error('Error:', error);
+        });
 
     function goToUpdate() {
         const id = [[${board.id}]];

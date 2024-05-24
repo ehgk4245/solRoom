@@ -4,23 +4,22 @@ import com.solRoom.solspring.controller.dto.FreeBoardDTO;
 import com.solRoom.solspring.domain.FreeBoard;
 import com.solRoom.solspring.domain.Member;
 import com.solRoom.solspring.repository.BoardRepository;
-import com.solRoom.solspring.repository.MemberRepository;
 import jakarta.transaction.Transactional;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+@AllArgsConstructor
 @Service
 public class FreeBoardService implements BoardService {
     @Autowired
-    BoardRepository boardRepository;
-    @Autowired
-    MemberRepository memberRepository;
+    private final BoardRepository boardRepository;
     @Transactional
     public void savePost(FreeBoardDTO boardDTO, Member member){
         FreeBoard board = boardDTO.toEntity(member);
-        board.setCount(0);
         boardRepository.save(board);
     }
     @org.springframework.transaction.annotation.Transactional(readOnly = true)
@@ -45,15 +44,41 @@ public class FreeBoardService implements BoardService {
                 () -> new IllegalArgumentException("Invalid Board Id: " + id)
         );
 
-
         // 기존 board 엔티티의 필드를 DTO의 값으로 업데이트
         board.setTitle(boardDTO.getTitle());
         board.setContent(boardDTO.getContent());
-        board.setCount(boardDTO.getCount());
+        board.setViewCount(boardDTO.getViewCount());
         board.setCreateDate(boardDTO.getCreateDate());
         // 필요한 다른 필드 업데이트...
 
         boardRepository.save(board);
     }
+
+    public void upLikeCount(Long boardId){
+        FreeBoard board = boardRepository.findById(boardId)
+                .orElseThrow(()->{
+                   return new IllegalArgumentException("게시물을 찾을 수 없습니다.");
+                });
+        board.setLikeCount(board.getLikeCount()+1);
+        boardRepository.save(board);
+    }
+
+    public void downLikeCount(Long boardId) {
+        FreeBoard board = boardRepository.findById(boardId)
+                .orElseThrow(()->{
+                    return new IllegalArgumentException("게시물을 찾을 수 없습니다.");
+                });
+        board.setLikeCount(board.getLikeCount()-1);
+        boardRepository.save(board);
+    }
+    public void upViewCount(Long boardId){
+        FreeBoard board = boardRepository.findById(boardId)
+                .orElseThrow(()->{
+                    return new IllegalArgumentException("게시물을 찾을 수 없습니다.");
+                });
+        board.setViewCount(board.getViewCount()+1);
+        boardRepository.save(board);
+    }
+
 
 }
