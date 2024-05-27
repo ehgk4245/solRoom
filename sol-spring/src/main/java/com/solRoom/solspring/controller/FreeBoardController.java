@@ -1,11 +1,10 @@
 package com.solRoom.solspring.controller;
 
 import com.solRoom.solspring.config.auth.CustomUserDetails;
+import com.solRoom.solspring.controller.dto.BoardImageUploadDTO;
 import com.solRoom.solspring.controller.dto.FreeBoardDTO;
 import com.solRoom.solspring.controller.dto.FreeBoardReplyDTO;
-import com.solRoom.solspring.domain.FreeBoard;
-import com.solRoom.solspring.domain.Like;
-import com.solRoom.solspring.domain.Member;
+import com.solRoom.solspring.domain.*;
 import com.solRoom.solspring.service.FreeBoardService;
 import com.solRoom.solspring.service.LikeService;
 import lombok.AllArgsConstructor;
@@ -17,6 +16,9 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @Controller
 @AllArgsConstructor
@@ -28,17 +30,19 @@ public class FreeBoardController {
     @Autowired
     private final LikeService likeService;
 
+
     @GetMapping("/saveForm")
     public String SaveForm() {
         return "/freeBoard/saveForm"; // saveForm.html 파일의 이름
     }
 
     @PostMapping("/save")
-    public String saveForm(FreeBoardDTO boardDTO, @AuthenticationPrincipal CustomUserDetails userDetails) {
-        boardService.savePost(boardDTO, userDetails.getMember());
+    public String saveForm(FreeBoardDTO boardDTO, @AuthenticationPrincipal CustomUserDetails userDetails,
+                           @ModelAttribute BoardImageUploadDTO boardImageUploadDTO) {
+        System.out.println(boardImageUploadDTO);
+        boardService.savePost(boardDTO, boardImageUploadDTO,userDetails.getMember());
         return "redirect:/freeBoard/boardList";
     }
-
     @GetMapping("/boardList")
     public String boardList(Model model, @PageableDefault(size = 3, sort = "id", direction = Sort.Direction.DESC)
     Pageable pageable) {
@@ -51,9 +55,11 @@ public class FreeBoardController {
                            @AuthenticationPrincipal CustomUserDetails userDetails, Model model) {
         FreeBoard board = boardService.viewDetail(id);
         model.addAttribute("board", board);
+        System.out.println(board.getImageUrls());
+
         model.addAttribute("replyDTO", new FreeBoardReplyDTO());
         boardService.upViewCount(id);
-        boolean liked = likeService.isLikedByMember(userDetails.getMember(), id, Like.BoardType.FREE);
+        boolean liked = likeService.isLikedByMember(userDetails.getMember(), id, BoardType.FREE);
         model.addAttribute("liked", liked);
         return "/freeBoard/detail";
     }
@@ -82,7 +88,7 @@ public class FreeBoardController {
     public String likePost(@PathVariable("boardId") Long boardId,
                            @AuthenticationPrincipal CustomUserDetails userDetails) {
         Member member = userDetails.getMember();
-        likeService.likePost(member, boardId, Like.BoardType.FREE);
+        likeService.likePost(member, boardId, BoardType.FREE);
         boardService.upLikeCount(boardId);
         return "redirect:/freeBoard/" + boardId;
     }
@@ -91,7 +97,7 @@ public class FreeBoardController {
     public String unlikePost(@PathVariable("boardId") Long boardId,
                              @AuthenticationPrincipal CustomUserDetails userDetails) {
         Member member = userDetails.getMember();
-        likeService.unlikePost(member, boardId, Like.BoardType.FREE);
+        likeService.unlikePost(member, boardId, BoardType.FREE);
         boardService.downLikeCount(boardId);
         return "redirect:/freeBoard/" + boardId;
     }

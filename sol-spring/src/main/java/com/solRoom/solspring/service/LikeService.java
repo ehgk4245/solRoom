@@ -1,6 +1,7 @@
 package com.solRoom.solspring.service;
 
 import com.solRoom.solspring.controller.dto.MemberDTO;
+import com.solRoom.solspring.domain.BoardType;
 import com.solRoom.solspring.domain.Like;
 import com.solRoom.solspring.domain.Member;
 import com.solRoom.solspring.repository.LikeRepository;
@@ -16,20 +17,20 @@ public class LikeService {
     @Autowired
     private final LikeRepository likeRepository;
 
-    public void likePost(Member member, Long boardId, Like.BoardType boardType) {
+    public void likePost(Member member, Long boardId, BoardType boardType) {
         Optional<Like> like = likeRepository.findByMemberAndBoardIdAndBoardType(member, boardId, boardType);
         if(like.isEmpty()){
             likeRepository.save(new Like(null,member,boardId,boardType));
         }
     }
-    public void unlikePost(Member member, Long boardId, Like.BoardType boardType) {
+    public void unlikePost(Member member, Long boardId, BoardType boardType) {
         Optional<Like> like = likeRepository.findByMemberAndBoardIdAndBoardType(member, boardId, boardType);
         if(like.isPresent()){
             likeRepository.delete(like.get());
         }
     }
 
-    public boolean isLikedByMember(Member member, Long boardId, Like.BoardType boardType){
+    public boolean isLikedByMember(Member member, Long boardId, BoardType boardType){
         return likeRepository.findByMemberAndBoardIdAndBoardType(member,boardId,boardType).isPresent();
     }
 
