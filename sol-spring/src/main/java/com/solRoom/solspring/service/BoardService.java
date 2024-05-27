@@ -15,6 +15,6 @@ public interface BoardService {
 
     void deleteBoard(Long id); // 글 삭제
     
-    void updateBoard(Long id, FreeBoardDTO boardDTO); // 글 수정
+    //void updateBoard(Long id, FreeBoardDTO boardDTO); // 글 수정
 
 }

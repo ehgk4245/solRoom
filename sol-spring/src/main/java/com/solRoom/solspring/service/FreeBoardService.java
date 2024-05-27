@@ -1,27 +1,71 @@
 package com.solRoom.solspring.service;
 
+import com.solRoom.solspring.controller.dto.BoardImageUploadDTO;
 import com.solRoom.solspring.controller.dto.FreeBoardDTO;
+import com.solRoom.solspring.domain.BoardType;
 import com.solRoom.solspring.domain.FreeBoard;
+import com.solRoom.solspring.domain.ImageOfBoard;
 import com.solRoom.solspring.domain.Member;
 import com.solRoom.solspring.repository.BoardRepository;
+import com.solRoom.solspring.repository.ImageOfBoardRepository;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.List;
 import java.util.Optional;
-@AllArgsConstructor
+import java.util.UUID;
+
+
+@RequiredArgsConstructor
 @Service
 public class FreeBoardService implements BoardService {
     @Autowired
     private final BoardRepository boardRepository;
+
+    @Autowired
+    private final ImageOfBoardRepository imageOfBoardRepository;
+
+    @Value("${file.boardImagePath}")
+    private String uploadFolder;
     @Transactional
-    public void savePost(FreeBoardDTO boardDTO, Member member){
+    public void savePost(FreeBoardDTO boardDTO, BoardImageUploadDTO boardImageUploadDTO, Member member) {
         FreeBoard board = boardDTO.toEntity(member);
         boardRepository.save(board);
+        Long id = board.getId();
+        if (boardImageUploadDTO.getFiles() != null && !boardImageUploadDTO.getFiles().isEmpty()) {
+            for (MultipartFile file : boardImageUploadDTO.getFiles()) {
+                UUID uuid = UUID.randomUUID();
+                String imageFileName = uuid + "_" + file.getOriginalFilename();
+                File destinationFile = new File(uploadFolder + imageFileName);
+
+                try {
+                    file.transferTo(destinationFile);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+
+                String imageUrl = "/boardImages/" + imageFileName;
+                board.getImageUrls().add(imageUrl);
+
+                ImageOfBoard image = ImageOfBoard.builder()
+                        .url(imageUrl)
+                        .boardType(BoardType.FREE)
+                        .boardId(id)
+                        .build();
+                imageOfBoardRepository.save(image);
+            }
+        }
     }
+
     @org.springframework.transaction.annotation.Transactional(readOnly = true)
     public Page<FreeBoard> boardList(Pageable pageable){
         return boardRepository.findAll(pageable);
@@ -36,6 +80,7 @@ public class FreeBoardService implements BoardService {
     @Transactional
     public void deleteBoard(Long id) {
         boardRepository.deleteById(id);
+        imageOfBoardRepository.deleteByBoardTypeAndBoardId(BoardType.FREE, id);
     }
 
     @Transactional
@@ -79,6 +124,7 @@ public class FreeBoardService implements BoardService {
         board.setViewCount(board.getViewCount()+1);
         boardRepository.save(board);
     }
+
 
 
 }

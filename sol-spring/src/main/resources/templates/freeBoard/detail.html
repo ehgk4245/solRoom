@@ -133,6 +133,18 @@
         <p>좋아요 수: <span th:text="${board.likeCount}">0</span></p>
     </div>
 
+    <!-- 이미지 표시 -->
+    <div class="mb-3" th:if="${board.imageUrls != null}">
+        <label class="form-label">Images</label>
+        <div>
+            <th:block th:each="imageUrl : ${board.imageUrls}">
+                <img th:src="${imageUrl}" alt="Image" width="500px" height="500px">
+            </th:block>
+        </div>
+    </div>
+
+
+
     <div class="back-button">
         <button class="btn btn-secondary" onclick="history.back()">돌아가기</button>
     </div>
@@ -187,6 +199,7 @@
         const formHtml = `
             <form id="deleteForm" action="/freeBoard/delete" method="post">
                 <input type="hidden" id="id" name="id" value="${id}" />
+
             </form>
         `;
         const doc = new DOMParser().parseFromString(formHtml, 'text/html');
@@ -202,7 +215,8 @@
         const formHtml = `
             <form id="deleteReplyForm" action="/replies/delete" method="post">
                 <input type="hidden" id="replyId" name="replyId" value="${replyId}" />
-                <input type="hidden" id="boardId" name="boardId" value="${board.id}" />
+                <input type="hidden" id="boardId" name="boardId" value="[[${board.id}]]" />
+
             </form>
         `;
         const doc = new DOMParser().parseFromString(formHtml, 'text/html');
@@ -219,7 +233,7 @@
         }
         const formHtml = `
             <form id="saveReplyForm" action="/replies/save" method="post">
-                <input type="hidden" id="boardId" name="boardId" value="${board.id}" />
+                <input type="hidden" id="boardId" name="boardId" value="[[${board.id}]]" />
                 <input type="hidden" id="content" name="content" value="${content}" />
             </form>
         `;
@@ -228,23 +242,6 @@
         document.body.append(form);
         document.getElementById('saveReplyForm').submit();
     }
-
-    function likePost(boardId) {
-        fetch(`/${boardId}/like`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({})
-        }).then(response => {
-            if (response.ok) {
-                window.location.reload(); // 좋아요 후 페이지 새로고침
-            } else {
-                alert('Failed to like the post');
-            }
-        }).catch(error => {
-            console.error('Error:', error);
-        });
 
     function goToUpdate() {
         const id = [[${board.id}]];

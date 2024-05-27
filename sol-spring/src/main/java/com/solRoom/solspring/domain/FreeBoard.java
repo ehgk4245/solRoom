@@ -9,6 +9,7 @@ import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 
 @NoArgsConstructor
@@ -22,11 +23,15 @@ public class FreeBoard {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column
+    @Enumerated(EnumType.STRING)
+    private BoardType boardType;
+
     @Column(nullable = false)
     private String title;
 
-    @Column(columnDefinition = "longblob")
-    private String content; // 이미지 파일을 저장할 byte 배열
+    @Column(nullable = false)
+    private String content;
 
     private int viewCount=0;
 
@@ -36,8 +41,12 @@ public class FreeBoard {
     @JoinColumn(name="memberId")
     private Member member;
 
-    @OneToMany(mappedBy = "board",fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "board",fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     private List<FreeBoardReply> reply;
+
+    @ElementCollection
+    @Column
+    private List<String> imageUrls = new ArrayList<>();
 
     @CreationTimestamp
     private Timestamp createDate;

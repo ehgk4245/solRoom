@@ -5,29 +5,25 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
+@Builder
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
-@Builder
 @Entity
-@Table(name ="likes")
-public class Like {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class ImageOfBoard {
+
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "memberId", nullable = false)
-    private Member member;
-
-    @Column(nullable = false)
+    @Column
     private Long boardId;
 
     @Enumerated(EnumType.STRING)
+    @Column
     private BoardType boardType;
 
-
+    @Column(nullable = false)
+    private String url;
 
 
 

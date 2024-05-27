@@ -50,6 +50,7 @@ public class MemberController {
         // 유효성 검사 오류 확인
         if (bindingResult.hasErrors()) {
             model.addAttribute("member",memberDTO);
+            model.addAttribute("check",false);
             return "joinForm";
         }
         // 이메일 중복 검사
@@ -58,6 +59,7 @@ public class MemberController {
             model.addAttribute("errorMessage","이미 가입된 이메일 주소입니다.");
             return "joinForm";
         }
+        model.addAttribute("check",true);
         // 유효성 검사와 이메일 중복 검사를 모두 통과한 경우 회원가입 처리
         Member mem = memberService.join(memberDTO);
         System.out.println("회원가입 완료! " + mem);
