@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Online Shop</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"/>
+    <link rel="stylesheet" href="/css/home.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .main-content {
+            display: flex;
+            flex: 1;
+        }
+
+        .sidebar {
+            width: 200px;
+            background-color: #f8f9fa;
+            border-right: 1px solid #dddddd;
+        }
+
+        .sidebar .category {
+            cursor: pointer;
+            color: #000000;
+            padding: 10px 16px;
+            text-decoration: none;
+            font-size: 17px;
+            display: block;
+            background-color: #ffffff;
+            border-bottom: 1px solid #cccccc;
+            text-align: left;
+        }
+
+        .sidebar .category:hover, .sidebar .category.active {
+            background-color: #87ceeb;
+            color: white;
+        }
+
+        .content {
+            flex: 1;
+            padding: 20px;
+        }
+
+        .products {
+            display: none;
+        }
+
+        .products.active {
+            display: block;
+        }
+
+        .product-card {
+            width: 100%;
+            max-width: 250px;
+            margin: 10px;
+            border: 1px solid #cccccc;
+            border-radius: 5px;
+            overflow: hidden;
+            text-align: center;
+        }
+
+        .product-card img {
+            width: 100%;
+            height: auto;
+        }
+
+        .product-card .product-description {
+            padding: 10px;
+        }
+
+        .logo img {
+            width: 200px;
+            height: auto;
+            cursor: pointer;
+            margin-left: 50px;
+        }
+
+        .search-bar {
+            text-align: center;
+            margin-top: 0px;
+        }
+
+        .search-bar input[type="text"] {
+            padding: 8px;
+            border: 2px solid #87ceeb;
+            border-radius: 5px;
+            width: 300px;
+        }
+
+        .search-bar button {
+            padding: 8px 15px;
+            background-color: #3498db;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .breadcrumb {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .breadcrumb-item::before,
+        .breadcrumb-item::after {
+            content: "";
+        }
+
+        .breadcrumb-item + .breadcrumb-item::before {
+            display: none;
+        }
+
+        .breadcrumb-item + .breadcrumb-item {
+            margin-left: 20px;
+        }
+
+        .breadcrumb-item a {
+            color: black;
+            font-size: 1.2em;
+            text-decoration: none;
+        }
+
+        .breadcrumb-item a:hover {
+            text-decoration: underline;
+        }
+
+        footer {
+            border-top: 2px solid #cccccc;
+            background-color: #ffffff;
+            padding: 50px 0;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <div class="container">
+        <div class="logo">
+            <div><a href="/"><img src="/static/album/logo.jpg" alt="Logo"></a></div>
+        </div>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a th:href="@{/login}" sec:authorize="isAnonymous()">로그인</a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a th:href="@{/newMember}" sec:authorize="isAnonymous()">회원가입</a>
+                </li>
+                <li class="breadcrumb-item" sec:authorize="isAuthenticated()">
+                    <a th:href="@{/myPage}">마이페이지</a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a th:href="@{/logout}" sec:authorize="isAuthenticated()">로그아웃</a>
+                </li>
+            </ol>
+        </nav>
+        <div class="search-bar">
+            <input type="text" placeholder="검색">
+            <button type="submit">검색</button>
+        </div>
+    </div>
+</header>
+
+<!-- Main Content -->
+<div class="main-content">
+    <div class="sidebar">
+        <div class="category" onclick="showCategory('kitchen')">주방</div>
+        <div class="category" onclick="showCategory('interior')">인테리어</div>
+        <div class="category" onclick="showCategory('bathroom')">욕실</div>
+    </div>
+    <div class="content container">
+        <div id="kitchen" class="products">
+            <h3>주방</h3>
+            <div class="product-card">
+                <img src="/static/album/cat.bmp" alt="주방 상품 이미지">
+                <div class="product-description">
+                    <h5>주방 상품 1</h5>
+                    <p>이것은 주방 상품의 설명입니다.</p>
+                </div>
+            </div>
+            <div class="product-card">
+                <img src="/static/album/cat.bmp" alt="주방 상품 이미지">
+                <div class="product-description">
+                    <h5>주방 상품 2</h5>
+                    <p>이것은 주방 상품의 설명입니다.</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="interior" class="products">
+            <h3>인테리어</h3>
+            <div class="product-card">
+                <img src="/static/album/cat.bmp" alt="인테리어 상품 이미지">
+                <div class="product-description">
+                    <h5>인테리어 상품 1</h5>
+                    <p>이것은 인테리어 상품의 설명입니다.</p>
+                </div>
+            </div>
+            <div class="product-card">
+                <img src="/static/album/cat.bmp" alt="인테리어 상품 이미지">
+                <div class="product-description">
+                    <h5>인테리어 상품 2</h5>
+                    <p>이것은 인테리어 상품의 설명입니다.</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="bathroom" class="products">
+            <h3>욕실</h3>
+            <div class="product-card">
+                <img src="/static/album/cat.bmp" alt="욕실 상품 이미지">
+                <div class="product-description">
+                    <h5>욕실 상품 1</h5>
+                    <p>이것은 욕실 상품의 설명입니다.</p>
+                </div>
+            </div>
+            <div class="product-card">
+                <img src="/static/album/cat.bmp" alt="욕실 상품 이미지">
+                <div class="product-description">
+                    <h5>욕실 상품 2</h5>
+                    <p>이것은 욕실 상품의 설명입니다.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer>
+    <p>이 곳은 푸터입니다.</p>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+<script>
+    function showCategory(category) {
+        const categories = document.querySelectorAll('.sidebar .category');
+        categories.forEach(cat => cat.classList.remove('active'));
+
+        const products = document.querySelectorAll('.products');
+        products.forEach(prod => prod.classList.remove('active'));
+
+        document.querySelector(`.category[onclick="showCategory('${category}')"]`).classList.add('active');
+        document.getElementById(category).classList.add('active');
+    }
+
+    // 초기 상태 설정
+    document.addEventListener('DOMContentLoaded', function() {
+        showCategory('kitchen'); // 기본으로 주방 카테고리를 표시합니다.
+    });
+</script>
+</body>
+</html>
