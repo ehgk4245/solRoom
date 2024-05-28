@@ -26,12 +26,13 @@ import java.util.Map;
 @AllArgsConstructor
 public class MemberController {
     @Autowired
-    private  final MemberService memberService;
+    private final MemberService memberService;
 
     //-----------------회원가입----------------------
     @PostMapping("/checkDuplicateEmail")
     public ResponseEntity<Map<String, Boolean>> checkDuplicateEmail(@RequestParam("email") String email) {
         boolean isDuplicate = memberService.checkDuplicateEmail(email);
+
         Map<String, Boolean> response = new HashMap<>();
         response.put("duplicate", isDuplicate);
         return ResponseEntity.ok(response);
@@ -42,6 +43,10 @@ public class MemberController {
         model.addAttribute("member", new MemberDTO.RequestMemberDTO());
         return "joinForm";
     }
+    @GetMapping("/myPage")
+    public String showMyPageForm(Model model) {
+        return "myPage";
+    }
 
     @PostMapping("/newMember")
     public String processRegistrationForm(@Valid @ModelAttribute("member")MemberDTO.RequestMemberDTO memberDTO,
@@ -50,16 +55,15 @@ public class MemberController {
         // 유효성 검사 오류 확인
         if (bindingResult.hasErrors()) {
             model.addAttribute("member",memberDTO);
-            model.addAttribute("check",false);
             return "joinForm";
         }
+
         // 이메일 중복 검사
         if (memberService.isDuplicateEmail(memberDTO)) {
             // 중복된 이메일이 있는 경우 회원가입 폼으로 리다이렉트하고 에러 메시지를 전달
             model.addAttribute("errorMessage","이미 가입된 이메일 주소입니다.");
             return "joinForm";
         }
-        model.addAttribute("check",true);
         // 유효성 검사와 이메일 중복 검사를 모두 통과한 경우 회원가입 처리
         Member mem = memberService.join(memberDTO);
         System.out.println("회원가입 완료! " + mem);
@@ -67,10 +71,18 @@ public class MemberController {
         return "redirect:/login";
     }
 
+
     @GetMapping("/login")
     public String loginForm(){
 
         return "loginForm";
+    }
+
+    @GetMapping("/test")
+    public String test(@AuthenticationPrincipal CustomUserDetails userPrincipal){
+        System.out.println(userPrincipal.getAuthorities());
+        System.out.println(userPrincipal.getMember());
+        return "home";
     }
 
 }

@@ -21,10 +21,10 @@
         }
 
         .logo img{
-
-            width:150px;
-            height: auto;
-            cursor: pointer;
+                    width:200px;
+                    height: auto;
+                    cursor: pointer;
+                    margin-left: 50px;
         }
 
         .search-bar {
@@ -45,15 +45,35 @@
             border-radius: 5px;
             cursor: pointer;
         }
-        .user-options {
-            position: absolute;
-            top: 50px;
-            right: 50px;
+        .breadcrumb {
+            list-style: none; /* 기본 점 스타일 제거 */
+            padding: 0; /* 기본 패딩 제거 */
+            margin: 0; /* 기본 마진 제거 */
+            display: flex; /* 수평 정렬 */
+            justify-content: flex-end; /* 우측 정렬 */
         }
-        .user-options a {
-            color: #000000;
-            text-decoration: none;
-            margin-left: 10px;
+
+        .breadcrumb-item::before,
+        .breadcrumb-item::after {
+            content: ""; /* 기본 / 문자 제거 */
+        }
+
+        .breadcrumb-item + .breadcrumb-item::before {
+            display: none; /* 기본 구분자 숨기기 */
+        }
+
+        .breadcrumb-item + .breadcrumb-item {
+            margin-left: 20px; /* 링크 간의 간격 추가 */
+        }
+
+        .breadcrumb-item a {
+            color: black; /* 텍스트 색상 검은색으로 설정 */
+            font-size: 1.2em; /* 글씨 크기 조정 (필요에 따라 크기 조정) */
+            text-decoration: none; /* 밑줄 제거 (필요에 따라) */
+        }
+
+        .breadcrumb-item a:hover {
+            text-decoration: underline; /* 호버 시 밑줄 추가 (선택 사항) */
         }
         .menu-bar {
             background-color: #ffffff;
