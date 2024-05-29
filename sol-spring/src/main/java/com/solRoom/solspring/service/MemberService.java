@@ -7,6 +7,8 @@ import com.solRoom.solspring.repository.MemberRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
@@ -56,5 +58,37 @@ public class MemberService {
 
     public boolean checkDuplicateEmail(String email) {
         return memberRepository.existsByEmail(email);
+    }
+    public Member getCurrentMember() {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String email;
+        if (principal instanceof UserDetails) {
+            email = ((UserDetails) principal).getUsername();
+        } else {
+            email = principal.toString();
+        }
+        return memberRepository.findByEmail(email)
+                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다: " + email));
+    }
+
+    public void profileUpdate(String profileImageUrl, String nickname, String statusMessage) {
+        // 현재 사용자 정보를 가져옴
+        Member currentMember = getCurrentMember();
+
+        // 전달된 프로필 정보로 현재 사용자 정보 업데이트
+        currentMember.setProfileImageUrl(profileImageUrl);
+        currentMember.setNickname(nickname);
+        currentMember.setStatusMessage(statusMessage);
+
+        // 업데이트된 회원 정보 저장
+        memberRepository.save(currentMember);
+    }
+
+    public void addressUpdate(String address){
+        Member currentMember = getCurrentMember();
+
+        currentMember.setAddress(address);
+
+        memberRepository.save(currentMember);
     }
 }

@@ -33,5 +33,9 @@ public class Member {
     @Enumerated(EnumType.STRING)
     private RoleType role;
 
+    @Column(length = 255)
+    private String profileImageUrl;
 
+    @Column(length = 255)
+    private String statusMessage;
 }

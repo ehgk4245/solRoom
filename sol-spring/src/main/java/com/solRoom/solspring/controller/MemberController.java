@@ -43,10 +43,6 @@ public class MemberController {
         model.addAttribute("member", new MemberDTO.RequestMemberDTO());
         return "joinForm";
     }
-    @GetMapping("/myPage")
-    public String showMyPageForm(Model model) {
-        return "myPage";
-    }
 
     @PostMapping("/newMember")
     public String processRegistrationForm(@Valid @ModelAttribute("member")MemberDTO.RequestMemberDTO memberDTO,
@@ -85,4 +81,27 @@ public class MemberController {
         return "home";
     }
 
+    @GetMapping("/myPage")
+    public String myPage(Model model) {
+        Member currentMember = memberService.getCurrentMember();
+        MemberDTO.DetailedMemberDTO memberDTO = MemberDTO.DetailedMemberDTO.fromEntity(currentMember);
+        model.addAttribute("user", memberDTO);
+        return "myPage";
+    }
+
+    @PostMapping("/profileUpdate")
+    public String profileUpdate(@RequestParam("profileImageUrl") String profileImageUrl,
+                                @RequestParam("nickname") String nickname,
+                                @RequestParam("statusMessage") String statusMessage){
+        memberService.profileUpdate(profileImageUrl, nickname, statusMessage);
+
+        return "redirect:/myPage";
+    }
+
+    @PostMapping("/addressUpdate")
+    public String profileUpdate(@RequestParam("address") String address){
+        memberService.addressUpdate(address);
+
+        return "redirect:/myPage";
+    }
 }

@@ -1,19 +1,23 @@
 package com.solRoom.solspring.controller.dto;
 
+import com.solRoom.solspring.config.auth.CustomUserDetails;
 import com.solRoom.solspring.domain.Member;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
-
 @Getter
 @Setter
 @Builder
 public class MemberDTO {
+
     @Getter
     @Setter
-    public static class RequestMemberDTO{
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class RequestMemberDTO {
         private Long id;
 
         @NotBlank(message = "이메일을 입력해주세요.")
@@ -33,8 +37,8 @@ public class MemberDTO {
 
         @NotBlank(message = "주소를 입력해주세요.")
         private String address;
-        private String confirmPassword;
 
+        private String confirmPassword;
 
         /* 암호화된 password */
         public void encryptPassword(String BCryptpassword) {
@@ -52,7 +56,48 @@ public class MemberDTO {
                     .address(address)
                     .build();
         }
-
     }
 
+    @Getter
+    @Setter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class DetailedMemberDTO {
+        private Long id;
+        private String email;
+        private String nickname;
+        private String name;
+        private String address;
+        private String profileImageUrl;
+        private String statusMessage;
+
+        /* DTO -> Entity */
+        public Member toEntity() {
+            return Member.builder()
+                    .id(id)
+                    .name(name)
+                    .nickname(nickname)
+                    .email(email)
+                    .address(address)
+                    .profileImageUrl(profileImageUrl)
+                    .statusMessage(statusMessage)
+                    .build();
+        }
+
+        /* Entity -> DTO */
+        public static DetailedMemberDTO fromEntity(Member member) {
+            return DetailedMemberDTO.builder()
+                    .id(member.getId())
+                    .email(member.getEmail())
+                    .nickname(member.getNickname())
+                    .name(member.getName())
+                    .address(member.getAddress())
+                    .profileImageUrl(member.getProfileImageUrl())
+                    .statusMessage(member.getStatusMessage())
+                    .build();
+        }
+    }
 }
+
+
