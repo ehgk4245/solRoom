@@ -37,15 +37,16 @@
 </head>
 <body>
 <div class="logo">
-    <div><a href="/"><img src="/album/logo.jpg"></a></div>
+    <div><a href="/"><img src="/album/logo.jpg" th:src="@{/album/logo.jpg}"></a></div>
 </div>
 <div class="container mt-5">
     <div class="profile-card">
         <div class="card">
-            <img src="https://via.placeholder.com/150" class="card-img-top" id="profile-img" alt="프로필 사진">
+            <img src="https://via.placeholder.com/150" class="card-img-top" id="profile-img" alt="프로필 사진" th:if="${user.profileImageUrl}" th:src="@{${user.profileImageUrl}}">
+            <img src="https://via.placeholder.com/150" class="card-img-top" id="profile-img" alt="프로필 사진" th:unless="${user.profileImageUrl}" th:src="@{/album/cat.bmp}">
             <div class="card-body text-center">
-                <h5 class="card-title" id="nickname-display">닉네임</h5>
-                <p class="card-text" id="status-display">상태메시지</p>
+                <h5 class="card-title" id="nickname-display" th:text="${user.nickname}">닉네임</h5>
+                <p class="card-text" id="status-display" th:if="${user.statusMessage}" th:text="${user.statusMessage}">상태메시지</p> <!-- 상태 메시지가 있는 경우에만 표시 -->
                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editProfileModal">프로필 편집</button>
             </div>
         </div>
@@ -59,15 +60,15 @@
                 <form id="infoForm">
                     <div class="mb-3">
                         <label for="username" class="form-label">사용자 이름</label>
-                        <input type="text" class="form-control" id="username" value="홍길동">
+                        <input type="text" class="form-control" id="username" th:value="${user.name}">
                     </div>
                     <div class="mb-3">
                         <label for="email" class="form-label">이메일 주소</label>
-                        <input type="email" class="form-control" id="email" value="user@example.com">
+                        <input type="email" class="form-control" id="email" th:value="${user.email}">
                     </div>
                     <div class="mb-3">
                         <label for="address" class="form-label">주소</label>
-                        <input type="text" class="form-control" id="address" value="서울특별시 강남구 테헤란로 123">
+                        <input type="text" class="form-control" id="address" th:value="${user.address}">
                     </div>
                     <button type="button" class="btn btn-primary" id="editAddressBtn">개인정보 수정</button>
                 </form>
@@ -75,6 +76,7 @@
         </div>
     </div>
 </div>
+
 
 <!-- 모달 -->
 <div class="modal fade" id="editProfileModal" tabindex="-1" aria-labelledby="editProfileModalLabel" aria-hidden="true">
@@ -88,11 +90,11 @@
                 <form id="editProfileForm">
                     <div class="mb-3">
                         <label for="nickname" class="form-label">닉네임</label>
-                        <input type="text" class="form-control" id="nickname" value="닉네임">
+                        <input type="text" class="form-control" id="nickname" th:value="${user.nickname}">
                     </div>
                     <div class="mb-3">
                         <label for="status" class="form-label">상태메시지</label>
-                        <input type="text" class="form-control" id="status" value="상태메시지">
+                        <input type="text" class="form-control" id="status" th:value="${user.statusMessage}">
                     </div>
                     <div class="mb-3">
                         <label for="profileImage" class="form-label">프로필 사진</label>
