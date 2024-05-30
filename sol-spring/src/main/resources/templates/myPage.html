@@ -60,17 +60,17 @@
                 <form id="infoForm">
                     <div class="mb-3">
                         <label for="username" class="form-label">사용자 이름</label>
-                        <input type="text" class="form-control" id="username" th:value="${user.name}">
+                        <input type="text" class="form-control" id="username" th:value="${user.name}" readonly disabled>
                     </div>
                     <div class="mb-3">
                         <label for="email" class="form-label">이메일 주소</label>
-                        <input type="email" class="form-control" id="email" th:value="${user.email}">
+                        <input type="email" class="form-control" id="email" th:value="${user.email}" readonly disabled>
                     </div>
                     <div class="mb-3">
                         <label for="address" class="form-label">주소</label>
-                        <input type="text" class="form-control" id="address" th:value="${user.address}">
+                        <input type="text" class="form-control" id="address" th:value="${user.address}" readonly disabled>
                     </div>
-                    <button type="button" class="btn btn-primary" id="editAddressBtn">개인정보 수정</button>
+                    <button type="button" class="btn btn-primary" id="editAddressBtn" data-bs-toggle="modal" data-bs-target="#editAddressModal">개인정보 수정</button>
                 </form>
             </div>
         </div>
@@ -139,30 +139,36 @@
         // 새로운 값 가져오기
         const newNickname = document.getElementById('nickname').value;
         const newStatus = document.getElementById('status').value;
+        const profileImageInput = document.getElementById('profileImage');
+        const profileImageFile = profileImageInput.files[0];
 
-        // 프로필 카드 업데이트
-        document.getElementById('nickname-display').innerText = newNickname;
-        document.getElementById('status-display').innerText = newStatus;
-
-        // 모달 닫기
-        const editProfileModal = bootstrap.Modal.getInstance(document.getElementById('editProfileModal'));
-        editProfileModal.hide();
-    });
-
-    document.getElementById('profileImage').addEventListener('change', function(event) {
-        const file = event.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                document.getElementById('profile-img').src = e.target.result;
-            };
-            reader.readAsDataURL(file);
+        // FormData 객체 생성
+        const formData = new FormData();
+        formData.append('nickname', newNickname);
+        formData.append('statusMessage', newStatus);
+        if (profileImageFile) {
+            formData.append('profileImageUrl', profileImageFile);
         }
-    });
 
-    document.getElementById('editAddressBtn').addEventListener('click', function() {
-        const editAddressModal = new bootstrap.Modal(document.getElementById('editAddressModal'));
-        editAddressModal.show();
+        // AJAX 요청
+        fetch('/profileUpdate', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            // 프로필 카드 업데이트
+            document.getElementById('nickname-display').innerText = newNickname;
+            document.getElementById('status-display').innerText = newStatus;
+            if (data.profileImageUrl) {
+                document.getElementById('profile-img').src = data.profileImageUrl;
+            }
+
+            // 모달 닫기
+            const editProfileModal = bootstrap.Modal.getInstance(document.getElementById('editProfileModal'));
+            editProfileModal.hide();
+        })
+        .catch(error => console.error('Error:', error));
     });
 
     document.getElementById('editAddressForm').addEventListener('submit', function(event) {
@@ -171,12 +177,24 @@
         // 새로운 주소 가져오기
         const newAddress = document.getElementById('newAddress').value;
 
-        // 주소 업데이트
-        document.getElementById('address').value = newAddress;
+        // AJAX 요청
+        fetch('/addressUpdate', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json' // JSON 형식으로 데이터 전송을 명시
+            },
+            body: JSON.stringify({ address: newAddress })
+        })
+        .then(response => response.json())
+        .then(data => {
+            // 주소 업데이트
+            document.getElementById('address').value = newAddress;
 
-        // 모달 닫기
-        const editAddressModal = bootstrap.Modal.getInstance(document.getElementById('editAddressModal'));
-        editAddressModal.hide();
+            // 모달 닫기
+            const editAddressModal = bootstrap.Modal.getInstance(document.getElementById('editAddressModal'));
+            editAddressModal.hide();
+        })
+        .catch(error => console.error('Error:', error));
     });
 </script>
 </body>

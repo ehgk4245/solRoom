@@ -5,6 +5,7 @@ import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 @Data
 @Builder
@@ -38,4 +39,7 @@ public class Member {
 
     @Column(length = 255)
     private String statusMessage;
+
+    @Column( precision = 10, scale = 2)
+    private BigDecimal credit;
 }

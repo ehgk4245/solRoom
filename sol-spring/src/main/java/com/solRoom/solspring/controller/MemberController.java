@@ -99,7 +99,7 @@ public class MemberController {
     }
 
     @PostMapping("/addressUpdate")
-    public String profileUpdate(@RequestParam("address") String address){
+    public String profileUpdate(@RequestBody String address){
         memberService.addressUpdate(address);
 
         return "redirect:/myPage";
