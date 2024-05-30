@@ -1,5 +1,6 @@
 package com.solRoom.solspring.domain;
 
+import com.solRoom.solspring.controller.dto.FreeBoardReplyDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

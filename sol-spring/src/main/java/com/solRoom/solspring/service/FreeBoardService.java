@@ -6,10 +6,9 @@ import com.solRoom.solspring.domain.BoardType;
 import com.solRoom.solspring.domain.FreeBoard;
 import com.solRoom.solspring.domain.ImageOfBoard;
 import com.solRoom.solspring.domain.Member;
-import com.solRoom.solspring.repository.BoardRepository;
+import com.solRoom.solspring.repository.FreeBoardRepository;
 import com.solRoom.solspring.repository.ImageOfBoardRepository;
 import jakarta.transaction.Transactional;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -20,22 +19,21 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 
 @RequiredArgsConstructor
 @Service
-public class FreeBoardService implements BoardService {
+public class FreeBoardService implements BoardService<FreeBoard, FreeBoardDTO> {
     @Autowired
-    private final BoardRepository boardRepository;
+    private final FreeBoardRepository boardRepository;
 
     @Autowired
     private final ImageOfBoardRepository imageOfBoardRepository;
 
     @Value("${file.boardImagePath}")
     private String uploadFolder;
+
     @Transactional
     public void savePost(FreeBoardDTO boardDTO, BoardImageUploadDTO boardImageUploadDTO, Member member) {
         FreeBoard board = boardDTO.toEntity(member);
@@ -67,16 +65,19 @@ public class FreeBoardService implements BoardService {
     }
 
     @org.springframework.transaction.annotation.Transactional(readOnly = true)
-    public Page<FreeBoard> boardList(Pageable pageable){
+    public Page<FreeBoard> boardList(Pageable pageable) {
         return boardRepository.findAll(pageable);
     }
+
     @org.springframework.transaction.annotation.Transactional(readOnly = true)
-    public FreeBoard viewDetail(Long Id){
-        return boardRepository.findById(Id)
-                .orElseThrow(()->{
+    public FreeBoardDTO viewDetail(Long Id) {
+        FreeBoard board = boardRepository.findById(Id)
+                .orElseThrow(() -> {
                     return new IllegalArgumentException("글 상세보기 실패 : 아이디를 찾을 수 없습니다.");
                 });
+        return FreeBoardDTO.fromEntity(board);
     }
+
     @Transactional
     public void deleteBoard(Long id) {
         boardRepository.deleteById(id);
@@ -99,32 +100,32 @@ public class FreeBoardService implements BoardService {
         boardRepository.save(board);
     }
 
-    public void upLikeCount(Long boardId){
+    public void upLikeCount(Long boardId) {
         FreeBoard board = boardRepository.findById(boardId)
-                .orElseThrow(()->{
-                   return new IllegalArgumentException("게시물을 찾을 수 없습니다.");
+                .orElseThrow(() -> {
+                    return new IllegalArgumentException("게시물을 찾을 수 없습니다.");
                 });
-        board.setLikeCount(board.getLikeCount()+1);
+        board.setLikeCount(board.getLikeCount() + 1);
         boardRepository.save(board);
     }
 
     public void downLikeCount(Long boardId) {
         FreeBoard board = boardRepository.findById(boardId)
-                .orElseThrow(()->{
+                .orElseThrow(() -> {
                     return new IllegalArgumentException("게시물을 찾을 수 없습니다.");
                 });
-        board.setLikeCount(board.getLikeCount()-1);
-        boardRepository.save(board);
-    }
-    public void upViewCount(Long boardId){
-        FreeBoard board = boardRepository.findById(boardId)
-                .orElseThrow(()->{
-                    return new IllegalArgumentException("게시물을 찾을 수 없습니다.");
-                });
-        board.setViewCount(board.getViewCount()+1);
+        board.setLikeCount(board.getLikeCount() - 1);
         boardRepository.save(board);
     }
 
+    public void upViewCount(Long boardId) {
+        FreeBoard board = boardRepository.findById(boardId)
+                .orElseThrow(() -> {
+                    return new IllegalArgumentException("게시물을 찾을 수 없습니다.");
+                });
+        board.setViewCount(board.getViewCount() + 1);
+        boardRepository.save(board);
+    }
 
 
 }

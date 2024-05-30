@@ -1,5 +1,6 @@
 package com.solRoom.solspring.controller.dto;
 
+import com.solRoom.solspring.domain.BarterBoard;
 import com.solRoom.solspring.domain.BoardType;
 import com.solRoom.solspring.domain.FreeBoard;
 import com.solRoom.solspring.domain.Member;
@@ -18,14 +19,14 @@ import java.util.List;
 @AllArgsConstructor
 public class FreeBoardDTO {
     private Long id;
-    private BoardType boardType;
+    private String boardType;
     private String title;
     private String content;
     private int viewCount;
     private int likeCount;
     private Long memberId;
     private String nickname;
-    private List<FreeBoardReplyDTO> replies;
+    private List<FreeBoardReplyDTO> replies; // 추가된 필드
     private List<String> imageUrls;
     private Timestamp createDate;
 
@@ -44,15 +45,18 @@ public class FreeBoardDTO {
                 .build();
     }
     /* Entity -> DTO */
-    public FreeBoardDTO(FreeBoard board) {
-        this.id = board.getId();
-        this.boardType = board.getBoardType();
-        this.title = board.getTitle();
-        this.content = board.getContent();
-        this.viewCount = board.getViewCount();
-        this.memberId = board.getMember().getId();
-        this.nickname = board.getMember().getNickname();
-        this.createDate = board.getCreateDate();
-        this.imageUrls = new ArrayList<>();
+    public static FreeBoardDTO fromEntity(FreeBoard freeBoard) {
+        return FreeBoardDTO.builder()
+                .id(freeBoard.getId())
+                .nickname(freeBoard.getMember().getNickname())
+                .boardType(freeBoard.getBoardType().toString()) // Convert Enum to String
+                .title(freeBoard.getTitle())
+                .content(freeBoard.getContent())
+                .viewCount(freeBoard.getViewCount())
+                .likeCount(freeBoard.getLikeCount())
+                .memberId(freeBoard.getMember().getId())
+                .imageUrls(freeBoard.getImageUrls())
+                .createDate(freeBoard.getCreateDate())
+                .build();
     }
 }

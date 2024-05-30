@@ -50,7 +50,6 @@ public class MemberController {
                                           Model model) {
         // 유효성 검사 오류 확인
         if (bindingResult.hasErrors()) {
-            model.addAttribute("member",memberDTO);
             return "joinForm";
         }
 

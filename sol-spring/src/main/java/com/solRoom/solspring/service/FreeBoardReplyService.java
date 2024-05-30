@@ -13,7 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -36,4 +38,19 @@ public class FreeBoardReplyService {
         FreeBoardReply boardReply = replyDTO.toEntity(board,member);
         freeBoardReplyRepository.save(boardReply);
     }
+
+    public List<FreeBoardReplyDTO> replyList(Long id) {
+        FreeBoard board = freeBoardRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("게시물을 찾을 수 없습니다."));
+        List<FreeBoardReply> replies = freeBoardReplyRepository.findByBoard(board);
+
+        return replies.stream()
+                .map(reply -> FreeBoardReplyDTO.builder()
+                        .content(reply.getContent())
+                        .nickname(reply.getMember().getNickname())
+                        .createDate(reply.getCreateDate())
+                        .build())
+                .collect(Collectors.toList());
+    }
+
 }
