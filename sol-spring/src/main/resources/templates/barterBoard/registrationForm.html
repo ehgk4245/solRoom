@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>물건 등록</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+</head>
+<body>
+<h1>물건 등록</h1>
+<form th:action="@{/barterBoard/registration}" th:object="${barterBoard}" method="post" enctype="multipart/form-data">
+    <div>
+        <label for="category">카테고리</label>
+        <select id="category" th:field="*{category}" class="form-select" aria-label="Default select example">
+            <option value="" selected>카테고리를 선택하세요</option>
+            <option value="CATEGORY1">카테고리 1</option>
+            <option value="CATEGORY2">카테고리 2</option>
+            <option value="CATEGORY3">카테고리 3</option>
+        </select>
+        <div th:if="${#fields.hasErrors('category')}" th:errors="*{category}"></div>
+    </div>
+    <div>
+        <label for="productName">물건 이름</label>
+        <input type="text" id="productName" th:field="*{productName}" />
+        <div th:if="${#fields.hasErrors('productName')}" th:errors="*{productName}"></div>
+    </div>
+    <div>
+        <label for="content">내용</label>
+        <textarea id="content" th:field="*{content}"></textarea>
+        <div th:if="${#fields.hasErrors('content')}" th:errors="*{content}"></div>
+    </div>
+    <div>
+        <label for="tradeType">거래 타입</label>
+        <select id="tradeType" th:field="*{tradeType}">
+            <option value="DONATION">기부</option>
+            <option value="EXCHANGE">교환</option>
+        </select>
+    </div>
+    <div>
+        <label for="itemCondition">물건 상태</label>
+        <select id="itemCondition" th:field="*{itemCondition}">
+            <option value="USED">중고</option>
+            <option value="NEW">새상품</option>
+        </select>
+    </div>
+    <div>
+        <label for="priceRange">가격대</label>
+        <input type="text" id="priceRange" th:field="*{priceRange}" />
+    </div>
+    <div class="form-group">
+        <label for="files">이미지 업로드:</label>
+        <div id="image-upload-container">
+            <div class="image-upload-group">
+                <input type="file" name="files" class="form-control">
+                <button type="button" class="btn btn-secondary" onclick="addImageUploadField()">이미지 추가</button>
+            </div>
+        </div>
+        <div th:if="${#fields.hasErrors('imageUrls')}" th:errors="*{imageUrls}"></div>
+    </div>
+    <div>
+        <label for="location">거래 장소</label>
+        <input type="text" id="location" th:field="*{location}" />
+        <div th:if="${#fields.hasErrors('location')}" th:errors="*{location}"></div>
+    </div>
+    <div>
+        <button type="submit">등록</button>
+    </div>
+</form>
+</body>
+</html>
+<script>
+    function addImageUploadField() {
+        var container = document.getElementById('image-upload-container');
+        var newField = document.createElement('div');
+        newField.className = 'image-upload-group';
+        newField.innerHTML = '<input type="file" name="files" class="form-control">' +
+                             '<button type="button" class="btn btn-secondary" onclick="removeImageUploadField(this)">제거</button>';
+        container.appendChild(newField);
+    }
+
+    function removeImageUploadField(button) {
+        var container = document.getElementById('image-upload-container');
+        container.removeChild(button.parentNode);
+    }
+</script>

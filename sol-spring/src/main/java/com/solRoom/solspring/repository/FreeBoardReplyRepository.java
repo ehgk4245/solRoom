@@ -1,8 +1,11 @@
 package com.solRoom.solspring.repository;
 
+import com.solRoom.solspring.domain.FreeBoard;
 import com.solRoom.solspring.domain.FreeBoardReply;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface FreeBoardReplyRepository extends JpaRepository<FreeBoardReply,Long> {
+import java.util.List;
 
+public interface FreeBoardReplyRepository extends JpaRepository<FreeBoardReply,Long> {
+    List<FreeBoardReply> findByBoard(FreeBoard board);
 }

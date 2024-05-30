@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>게시물 상세보기</title>
+    <link rel="stylesheet" href="path/to/your/css/style.css">
+</head>
+<body>
+<div class="container">
+    <h1 th:text="${board.productName}">Product Name</h1>
+    <p>작성자: <span th:text="${board.nickName}">Username</span></p>
+    <p>작성일: <span th:text="${#dates.format(board.createDate, 'yyyy-MM-dd HH:mm')}">2024-05-30 10:00</span></p>
+    <p>조회수: <span th:text="${board.viewCount}">0</span></p>
+
+    <h3>카테고리</h3>
+    <p th:text="${board.category}">Category</p>
+
+    <h3>내용</h3>
+    <p th:text="${board.content}">Content</p>
+
+    <h3>거래 타입</h3>
+    <p th:text="${board.tradeType}">Trade Type</p>
+
+    <h3>물품 상태</h3>
+    <p th:text="${board.itemCondition}">Item Condition</p>
+
+    <h3>가격대</h3>
+    <p th:text="${board.priceRange}">Price Range</p>
+
+    <h3>위치</h3>
+    <p th:text="${board.location}">Location</p>
+
+    <h3>이미지</h3>
+    <th:block th:each="imageUrl : ${board.imageUrls}">
+        <img th:src="${imageUrl}" alt="Image" width="500px" height="500px">
+    </th:block>
+
+
+    <div th:if="${board.memberId == #authentication.principal.member.id}">
+        <button id="btn-update" class="btn btn-warning" onclick="goToUpdate()">수정</button>
+        <button class="btn btn-danger" onclick="deleteBoard()">삭제</button>
+    </div>
+
+</div>
+<script>
+    function deleteBoard() {
+        const id = [[${board.id}]];
+        if (!confirm(id + '번 게시글을 삭제할까요?')) {
+            return false;
+        }
+        const formHtml = `
+            <form id="deleteForm" action="/barterBoard/delete" method="post">
+                <input type="hidden" id="id" name="id" value="${id}" />
+
+            </form>
+        `;
+        const doc = new DOMParser().parseFromString(formHtml, 'text/html');
+        const form = doc.body.firstChild;
+        document.body.append(form);
+        document.getElementById('deleteForm').submit();
+    }
+    </script>
+</body>
+</html>

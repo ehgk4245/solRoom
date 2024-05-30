@@ -4,7 +4,9 @@ import com.solRoom.solspring.config.auth.CustomUserDetails;
 import com.solRoom.solspring.controller.dto.BoardImageUploadDTO;
 import com.solRoom.solspring.controller.dto.FreeBoardDTO;
 import com.solRoom.solspring.controller.dto.FreeBoardReplyDTO;
+import com.solRoom.solspring.controller.dto.MemberDTO;
 import com.solRoom.solspring.domain.*;
+import com.solRoom.solspring.service.FreeBoardReplyService;
 import com.solRoom.solspring.service.FreeBoardService;
 import com.solRoom.solspring.service.LikeService;
 import lombok.AllArgsConstructor;
@@ -30,16 +32,18 @@ public class FreeBoardController {
     @Autowired
     private final LikeService likeService;
 
+    @Autowired
+    private final FreeBoardReplyService replyService;
+
 
     @GetMapping("/saveForm")
-    public String SaveForm() {
+    public String saveForm() {
         return "/freeBoard/saveForm"; // saveForm.html 파일의 이름
     }
 
     @PostMapping("/save")
     public String saveForm(FreeBoardDTO boardDTO, @AuthenticationPrincipal CustomUserDetails userDetails,
                            @ModelAttribute BoardImageUploadDTO boardImageUploadDTO) {
-        System.out.println(boardImageUploadDTO);
         boardService.savePost(boardDTO, boardImageUploadDTO,userDetails.getMember());
         return "redirect:/freeBoard/boardList";
     }
@@ -53,15 +57,23 @@ public class FreeBoardController {
     @GetMapping("/{id}")
     public String findById(@PathVariable("id") Long id,
                            @AuthenticationPrincipal CustomUserDetails userDetails, Model model) {
-        FreeBoard board = boardService.viewDetail(id);
+        FreeBoardDTO board = boardService.viewDetail(id);
+        List<FreeBoardReplyDTO>replyDTO =replyService.replyList(id);
+        System.out.println(replyDTO);
         model.addAttribute("board", board);
-        System.out.println(board.getImageUrls());
-
-        model.addAttribute("replyDTO", new FreeBoardReplyDTO());
+        model.addAttribute("replyDTO", replyDTO);
         boardService.upViewCount(id);
         boolean liked = likeService.isLikedByMember(userDetails.getMember(), id, BoardType.FREE);
         model.addAttribute("liked", liked);
+
+        // 댓글 작성용 빈 DTO 추가
+        FreeBoardReplyDTO newReplyDTO = new FreeBoardReplyDTO();
+        model.addAttribute("newReplyDTO", newReplyDTO);
+
+
+
         return "/freeBoard/detail";
+
     }
 
     @PostMapping("/delete")
@@ -72,8 +84,8 @@ public class FreeBoardController {
 
     @GetMapping("/updateForm/{Id}")
     public String updateForm(@PathVariable("Id") Long Id, Model model) {
-        FreeBoard board = boardService.viewDetail(Id);
-        model.addAttribute("boardDTO", new FreeBoardDTO(board));
+        FreeBoardDTO board = boardService.viewDetail(Id);
+        model.addAttribute("boardDTO", board);
         return "/freeBoard/updateForm";
     }
 

@@ -32,6 +32,8 @@ public class FreeBoardReply {
     @JoinColumn(name = "memberId")
     private Member member;
 
+    private String nickname;
+
     @CreationTimestamp
     private Timestamp createDate;
 }

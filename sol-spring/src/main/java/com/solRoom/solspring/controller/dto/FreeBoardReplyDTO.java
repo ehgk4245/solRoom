@@ -21,6 +21,7 @@ public class FreeBoardReplyDTO {
     private String content;
     private Long boardId;
     private Long memberId;
+    private String nickname;
     private Timestamp createDate;
 
     /* DTO -> Entity */
@@ -30,6 +31,7 @@ public class FreeBoardReplyDTO {
                 .content(content)
                 .board(board)
                 .member(member)
+                .nickname(member.getNickname())
                 .createDate(createDate)
                 .build();
     }

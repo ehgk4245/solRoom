@@ -127,7 +127,7 @@
     <h1>게시물 상세보기</h1>
     <div class="board-content">
         <h2>게시물 제목: <span th:text="${board.title}">제목 없음</span></h2>
-        <h3>작성자: <span th:text="${board.member.nickname}">작성자 없음</span></h3>
+        <h3>작성자: <span th:text="${board.nickname}">작성자 없음</span></h3>
         <p th:utext="${#strings.replace(board.content, '<[^>]*>', '')}">게시물 내용</p>
         <p>조회수: <span th:text="${board.viewCount}">0</span></p>
         <p>좋아요 수: <span th:text="${board.likeCount}">0</span></p>
@@ -148,7 +148,7 @@
     <div class="back-button">
         <button class="btn btn-secondary" onclick="history.back()">돌아가기</button>
     </div>
-    <div th:if="${board.member.id == #authentication.principal.member.id}">
+    <div th:if="${board.memberId == #authentication.principal.member.id}">
         <button id="btn-update" class="btn btn-warning" onclick="goToUpdate()">수정</button>
         <button class="btn btn-danger" onclick="deleteBoard()">삭제</button>
     </div>
@@ -169,7 +169,7 @@
     <div class="card my-4">
         <h5 class="card-header">댓글 작성</h5>
         <div class="card-body">
-            <form th:action="@{/freeBoard/{id}/save(id=${board.id})}" th:method="post" th:object="${replyDTO}">
+            <form th:action="@{/freeBoard/{id}/save(id=${board.id})}" th:method="post" th:object="${newReplyDTO}">
                 <input type="hidden" th:field="*{id}" />
                 <div class="form-group" style="margin-bottom: 10px;">
                     <textarea class="form-control" th:field="*{content}" rows="3" placeholder="댓글을 입력하세요"></textarea>
@@ -182,10 +182,10 @@
     <!-- 기존 댓글 목록 -->
     <div class="comments">
         <h5>댓글 목록</h5>
-        <div th:each="reply : ${board.reply}">
+        <div th:each="reply : ${replyDTO}">
             <div class="comment">
                 <p th:text="${reply.content}">댓글 내용</p>
-                <small th:text="${reply.member.nickname}">작성자</small>
+                <small th:text="${reply.nickname}">작성자</small>
             </div>
         </div>
     </div>
