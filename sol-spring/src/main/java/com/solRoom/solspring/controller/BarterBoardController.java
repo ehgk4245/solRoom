@@ -7,6 +7,10 @@ import com.solRoom.solspring.service.BarterBoardService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,8 +26,11 @@ public class BarterBoardController {
     @Autowired
     private final BarterBoardService boardService;
     @GetMapping("")
-    public String home(Model model){
-        List<BarterBoardDTO>boards = boardService.findAll();
+    public String home(Model model, @PageableDefault(size = 3, sort = "id", direction = Sort.Direction.DESC)
+    Pageable pageable,@RequestParam(name = "searchText" ,required = false, defaultValue = "") String searchText
+                       ){
+        //List<BarterBoardDTO>boards = boardService.findAll();
+        Page<BarterBoardDTO>boards = boardService.findSearchList(searchText,searchText,pageable);
         model.addAttribute("boards",boards);
         return "/barterBoard/home";
     }
@@ -54,6 +61,16 @@ public class BarterBoardController {
         return "redirect:/barterBoard";
     }
 
+    @GetMapping("/category/{id}")
+    public String boardList(@PathVariable("id")Long id, @PageableDefault(size = 3, sort = "id", direction = Sort.Direction.DESC)
+    Pageable pageable, Model model){
+
+        Page<BarterBoardDTO> boards = boardService.findByCategoryId(id, pageable);
+        model.addAttribute("boards", boards);
+        return "barterBoard/boardList";
+    }
+
+
     @GetMapping("/{id}")
     public String findById(@PathVariable("id") Long id,
                            @AuthenticationPrincipal CustomUserDetails userDetails, Model model) {
@@ -82,8 +99,6 @@ public class BarterBoardController {
         boardService.updateBoard(Id, boardDTO);
         return "redirect:/barterBoard";
     }
-
-
 
 
 }
