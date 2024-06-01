@@ -5,6 +5,7 @@ import com.solRoom.solspring.controller.dto.BoardImageUploadDTO;
 import com.solRoom.solspring.controller.dto.FreeBoardDTO;
 import com.solRoom.solspring.domain.*;
 import com.solRoom.solspring.repository.BarterBoardRepository;
+import com.solRoom.solspring.repository.CategoryRepository;
 import com.solRoom.solspring.repository.ImageOfBoardRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,14 +31,26 @@ public class BarterBoardService implements BoardService<BarterBoard, BarterBoard
     @Autowired
     private final ImageOfBoardRepository imageOfBoardRepository;
 
+    @Autowired
+    private CategoryRepository categoryRepository;
+
     @Value("${file.boardImagePath}")
     private String uploadFolder;
 
     @Override
     @Transactional
     public void savePost(BarterBoardDTO boardDTO, BoardImageUploadDTO boardImageUploadDTO, Member member) {
-        BarterBoard board = boardDTO.toEntity(member);
+        Category category = categoryRepository.findByName(boardDTO.getCategory());
+        // 카테고리가 존재하지 않으면 새로 생성하고 저장
+        if (category == null) {
+            category = new Category();
+            category.setName(boardDTO.getCategory());
+            category = categoryRepository.save(category);
+        }
+
+        BarterBoard board = boardDTO.toEntity(member,category);
         boardRepository.save(board);
+
         Long id = board.getId();
         if (boardImageUploadDTO.getFiles() != null && !boardImageUploadDTO.getFiles().isEmpty()) {
             for (MultipartFile file : boardImageUploadDTO.getFiles()) {
@@ -91,7 +104,7 @@ public class BarterBoardService implements BoardService<BarterBoard, BarterBoard
                 () -> new IllegalArgumentException("Invalid Board Id: " + id)
         );
         // 기존 board 엔티티의 필드를 DTO의 값으로 업데이트
-        board.setCategory(boardDTO.getCategory());
+        board.setCategory(board.getCategory());
         board.setContent(board.getContent());
         board.setProductName(board.getProductName());
         board.setTradeType(board.getTradeType());
@@ -111,5 +124,16 @@ public class BarterBoardService implements BoardService<BarterBoard, BarterBoard
         }
         return boardsDTO;
 
+    }
+
+
+    public Page<BarterBoardDTO> findByCategoryId(Long categoryId, Pageable pageable) {
+        Page<BarterBoard> boardPage = boardRepository.findByCategoryId(categoryId, pageable);
+        return boardPage.map(BarterBoardDTO::fromEntity);
+    }
+
+    public Page<BarterBoardDTO> findSearchList(String searchText1, String searchText2, Pageable pageable) {
+        Page<BarterBoard> barterBoardPage = boardRepository.findByProductNameContainingOrContentContaining(searchText1, searchText2, pageable);
+        return barterBoardPage.map(BarterBoardDTO::fromEntity);
     }
 }

@@ -27,8 +27,9 @@ public class BarterBoard {
     @Enumerated(EnumType.STRING)
     private BoardType boardType;
 
-    @Column
-    private String category;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "categoryId", nullable = false)
+    private Category category;
 
     @Column(nullable = false)
     private String productName;

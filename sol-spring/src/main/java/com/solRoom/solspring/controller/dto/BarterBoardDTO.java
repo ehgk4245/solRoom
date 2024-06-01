@@ -2,6 +2,7 @@ package com.solRoom.solspring.controller.dto;
 
 import com.solRoom.solspring.domain.BarterBoard;
 import com.solRoom.solspring.domain.BoardType;
+import com.solRoom.solspring.domain.Category;
 import com.solRoom.solspring.domain.Member;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
@@ -50,7 +51,7 @@ public class BarterBoardDTO {
     private String location;
     private Timestamp createDate;
 
-    public BarterBoard toEntity(Member member){
+    public BarterBoard toEntity(Member member,Category category){
         return BarterBoard.builder()
                 .id(id)
                 .member(member)
@@ -78,7 +79,7 @@ public class BarterBoardDTO {
                 .nickName(barterBoard.getMember().getNickname())
                 .viewCount(barterBoard.getViewCount())
                 .boardType(barterBoard.getBoardType().toString()) // Convert Enum to String
-                .category(barterBoard.getCategory())
+                .category(barterBoard.getCategory().getName())
                 .productName(barterBoard.getProductName())
                 .content(barterBoard.getContent())
                 .tradeType(barterBoard.getTradeType().toString()) // Convert Enum to String
