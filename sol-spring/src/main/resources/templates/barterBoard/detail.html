@@ -35,15 +35,19 @@
         <img th:src="${imageUrl}" alt="Image" width="500px" height="500px">
     </th:block>
 
-    <div th:if="${board.memberId == #authentication.principal.member.id}">
-        <button id="btn-update" class="btn btn-warning" onclick="goToUpdate()">수정</button>
-        <button class="btn btn-danger" onclick="deleteBoard()">삭제</button>
-    </div>
     <div>
         <button id="btn-chat" class="btn btn-primary" onclick="openChat()">채팅하기</button>
     </div>
 
 </div>
+<div class="back-button">
+    <button class="btn btn-secondary" onclick="history.back()">돌아가기</button>
+</div>
+<div th:if="${board.memberId == #authentication.principal.member.id}">
+    <button id="btn-update" class="btn btn-warning" onclick="goToUpdate()">수정</button>
+    <button class="btn btn-danger" onclick="deleteBoard()">삭제</button>
+</div>
+
 <script>
     function deleteBoard() {
         const id = [[${board.id}]];
@@ -53,12 +57,18 @@
         const formHtml = `
             <form id="deleteForm" action="/barterBoard/delete" method="post">
                 <input type="hidden" id="id" name="id" value="${id}" />
+
             </form>
         `;
         const doc = new DOMParser().parseFromString(formHtml, 'text/html');
         const form = doc.body.firstChild;
         document.body.append(form);
         document.getElementById('deleteForm').submit();
+    }
+
+    function goToUpdate() {
+        const id = [[${board.id}]];
+        window.location.href = '/freeBoard/updateForm/' + id;
     }
 
     function openChat() {
