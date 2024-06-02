@@ -16,6 +16,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.nio.file.attribute.UserPrincipal;
 import java.security.Principal;
@@ -90,18 +91,20 @@ public class MemberController {
     }
 
     @PostMapping("/profileUpdate")
-    public String profileUpdate(@RequestParam("profileImageUrl") String profileImageUrl,
-                                @RequestParam("nickname") String nickname,
-                                @RequestParam("statusMessage") String statusMessage){
-        memberService.profileUpdate(profileImageUrl, nickname, statusMessage);
+    public String profileUpdate(
+            @RequestParam(value = "profileImage", required = false) MultipartFile profileImage,
+            @RequestParam("nickname") String nickname,
+            @RequestParam("statusMessage") String statusMessage){
+        System.out.println("ddd");
+        memberService.profileUpdate(profileImage, nickname, statusMessage);
 
-        return "redirect:/myPage";
+        return "redirect:/home";
     }
 
     @PostMapping("/addressUpdate")
-    public String profileUpdate(@RequestBody String address){
-        memberService.addressUpdate(address);
+    public String addressUpdate(@RequestBody HashMap<String, String> map){
+        memberService.addressUpdate(map.get("address"));
 
-        return "redirect:/myPage";
+        return "redirect:/home";
     }
 }
