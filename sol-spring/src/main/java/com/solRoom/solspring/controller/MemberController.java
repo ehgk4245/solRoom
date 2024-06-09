@@ -3,8 +3,10 @@ package com.solRoom.solspring.controller;
 import com.solRoom.solspring.config.auth.CustomUserDetails;
 import com.solRoom.solspring.controller.dto.MemberDTO;
 import com.solRoom.solspring.domain.Member;
+import com.solRoom.solspring.domain.mallDomain.Order;
 import com.solRoom.solspring.service.MemberService;
 
+import com.solRoom.solspring.service.mallService.OrderService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,12 +24,16 @@ import java.nio.file.attribute.UserPrincipal;
 import java.security.Principal;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.List;
 
 @Controller
 @AllArgsConstructor
 public class MemberController {
     @Autowired
     private final MemberService memberService;
+
+    @Autowired
+    private OrderService orderService;
 
     //-----------------회원가입----------------------
     @PostMapping("/checkDuplicateEmail")
@@ -105,5 +111,12 @@ public class MemberController {
         memberService.addressUpdate(map.get("address"));
 
         return "redirect:/home";
+    }
+
+    @GetMapping("/myPage/orders/{memberId}")
+    public String getOrderByMember(@PathVariable Long memberId, Model model) {
+        List<Order> orders = orderService.getOrdersByMember(memberId);
+        model.addAttribute("orders", orders);
+        return "orderList";
     }
 }
