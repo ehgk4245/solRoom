@@ -14,7 +14,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.Errors;
 import org.springframework.validation.FieldError;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -71,18 +76,31 @@ public class MemberService {
                 .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다: " + email));
     }
 
-    public void profileUpdate(String profileImageUrl, String nickname, String statusMessage) {
+    public void profileUpdate(MultipartFile profileImage, String nickname, String statusMessage) {
         // 현재 사용자 정보를 가져옴
         Member currentMember = getCurrentMember();
 
+        if (profileImage != null && !profileImage.isEmpty()) {
+            try {
+                String filename = profileImage.getOriginalFilename();
+                Path filepath = Paths.get("C:\\Users\\KDH\\Desktop\\capstone\\sol-spring\\src\\main\\resources\\static\\album", filename);
+                Files.write(filepath, profileImage.getBytes());
+
+                currentMember.setProfileImageUrl("\\album\\" + filename);
+            } catch (IOException e) {
+                e.printStackTrace();
+                throw new RuntimeException("Failed to store file", e);
+            }
+        }
+
         // 전달된 프로필 정보로 현재 사용자 정보 업데이트
-        currentMember.setProfileImageUrl(profileImageUrl);
         currentMember.setNickname(nickname);
         currentMember.setStatusMessage(statusMessage);
 
         // 업데이트된 회원 정보 저장
         memberRepository.save(currentMember);
     }
+
 
     public void addressUpdate(String address){
         Member currentMember = getCurrentMember();
@@ -91,4 +109,6 @@ public class MemberService {
 
         memberRepository.save(currentMember);
     }
+
+
 }
