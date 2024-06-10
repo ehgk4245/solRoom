@@ -3,25 +3,21 @@ package com.solRoom.solspring.controller;
 import com.solRoom.solspring.config.auth.CustomUserDetails;
 import com.solRoom.solspring.controller.dto.MemberDTO;
 import com.solRoom.solspring.domain.Member;
-import com.solRoom.solspring.domain.mallDomain.Order;
+import com.solRoom.solspring.domain.mallDomain.Orders;
 import com.solRoom.solspring.service.MemberService;
 
-import com.solRoom.solspring.service.mallService.OrderService;
+import com.solRoom.solspring.service.mallService.OrdersService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.nio.file.attribute.UserPrincipal;
-import java.security.Principal;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.List;
@@ -33,7 +29,7 @@ public class MemberController {
     private final MemberService memberService;
 
     @Autowired
-    private OrderService orderService;
+    private OrdersService orderService;
 
     //-----------------회원가입----------------------
     @PostMapping("/checkDuplicateEmail")
@@ -115,7 +111,7 @@ public class MemberController {
 
     @GetMapping("/myPage/orders/{memberId}")
     public String getOrderByMember(@PathVariable Long memberId, Model model) {
-        List<Order> orders = orderService.getOrdersByMember(memberId);
+        List<Orders> orders = orderService.getOrdersByMember(memberId);
         model.addAttribute("orders", orders);
         return "orderList";
     }

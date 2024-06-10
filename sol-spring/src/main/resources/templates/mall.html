@@ -174,61 +174,43 @@
 <!-- Main Content -->
 <div class="main-content">
     <div class="sidebar">
-        <div class="category" onclick="showCategory('kitchen')">주방</div>
-        <div class="category" onclick="showCategory('interior')">인테리어</div>
-        <div class="category" onclick="showCategory('bathroom')">욕실</div>
+        <div class="category" th:classappend="${category == 'kitchen'} ? 'active'" onclick="location.href='/mall/category/kitchen'">주방</div>
+        <div class="category" th:classappend="${category == 'interior'} ? 'active'" onclick="location.href='/mall/category/interior'">인테리어</div>
+        <div class="category" th:classappend="${category == 'bathroom'} ? 'active'" onclick="location.href='/mall/category/bathroom'">욕실</div>
     </div>
     <div class="content container">
-        <div id="kitchen" class="products">
+        <div th:if="${category == 'kitchen'}">
             <h3>주방</h3>
-            <div class="product-card">
-                <img src="/static/album/cat.bmp" alt="주방 상품 이미지">
+            <div class="product-card" th:each="product : ${products}">
+                <img th:src="${product.imageUrl}" alt="주방 상품 이미지">
                 <div class="product-description">
-                    <h5>주방 상품 1</h5>
-                    <p>이것은 주방 상품의 설명입니다.</p>
-                </div>
-            </div>
-            <div class="product-card">
-                <img src="/static/album/cat.bmp" alt="주방 상품 이미지">
-                <div class="product-description">
-                    <h5>주방 상품 2</h5>
-                    <p>이것은 주방 상품의 설명입니다.</p>
+                    <h5 th:text="${product.name}"></h5>
+                    <p th:text="${product.description}"></p>
+                    <p th:text="'가격: ' + ${product.price}"></p>
                 </div>
             </div>
         </div>
 
-        <div id="interior" class="products">
+        <div th:if="${category == 'interior'}">
             <h3>인테리어</h3>
-            <div class="product-card">
-                <img src="/static/album/cat.bmp" alt="인테리어 상품 이미지">
+            <div class="product-card" th:each="product : ${products}">
+                <img th:src="${product.imageUrl}" alt="인테리어 상품 이미지">
                 <div class="product-description">
-                    <h5>인테리어 상품 1</h5>
-                    <p>이것은 인테리어 상품의 설명입니다.</p>
-                </div>
-            </div>
-            <div class="product-card">
-                <img src="/static/album/cat.bmp" alt="인테리어 상품 이미지">
-                <div class="product-description">
-                    <h5>인테리어 상품 2</h5>
-                    <p>이것은 인테리어 상품의 설명입니다.</p>
+                    <h5 th:text="${product.name}"></h5>
+                    <p th:text="${product.description}"></p>
+                    <p th:text="'가격: ' + ${product.price}"></p>
                 </div>
             </div>
         </div>
 
-        <div id="bathroom" class="products">
+        <div th:if="${category == 'bathroom'}">
             <h3>욕실</h3>
-            <div class="product-card">
-                <img src="/static/album/cat.bmp" alt="욕실 상품 이미지">
+            <div class="product-card" th:each="product : ${products}">
+                <img th:src="${product.imageUrl}" alt="욕실 상품 이미지">
                 <div class="product-description">
-                    <h5>욕실 상품 1</h5>
-                    <p>이것은 욕실 상품의 설명입니다.</p>
-                </div>
-            </div>
-            <div class="product-card">
-                <img src="/static/album/cat.bmp" alt="욕실 상품 이미지">
-                <div class="product-description">
-                    <h5>욕실 상품 2</h5>
-                    <p>이것은 욕실 상품의 설명입니다.</p>
+                    <h5 th:text="${product.name}"></h5>
+                    <p th:text="${product.description}"></p>
+                    <p th:text="'가격: ' + ${product.price}"></p>
                 </div>
             </div>
         </div>
@@ -242,20 +224,12 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 <script>
-    function showCategory(category) {
-        const categories = document.querySelectorAll('.sidebar .category');
-        categories.forEach(cat => cat.classList.remove('active'));
-
-        const products = document.querySelectorAll('.products');
-        products.forEach(prod => prod.classList.remove('active'));
-
-        document.querySelector(`.category[onclick="showCategory('${category}')"]`).classList.add('active');
-        document.getElementById(category).classList.add('active');
-    }
-
     // 초기 상태 설정
     document.addEventListener('DOMContentLoaded', function() {
-        showCategory('kitchen'); // 기본으로 주방 카테고리를 표시합니다.
+        const currentCategory = /*[[${category}]]*/ 'kitchen'; // 기본값 설정 또는 서버에서 전달된 카테고리
+        if (currentCategory) {
+            document.querySelector(`.category[onclick="location.href='/mall/category/${currentCategory}'"]`).classList.add('active');
+        }
     });
 </script>
 </body>

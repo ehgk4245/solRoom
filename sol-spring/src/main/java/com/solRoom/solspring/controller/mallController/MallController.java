@@ -2,14 +2,16 @@ package com.solRoom.solspring.controller.mallController;
 
 import com.solRoom.solspring.domain.mallDomain.Product;
 import com.solRoom.solspring.service.MemberService;
-import com.solRoom.solspring.service.mallService.OrderService;
+import com.solRoom.solspring.service.mallService.OrdersService;
 import com.solRoom.solspring.service.mallService.ProductService;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+@AllArgsConstructor
 @Controller
 @RequestMapping("/mall")
 public class MallController {
@@ -18,23 +20,27 @@ public class MallController {
     private ProductService productService;
 
     @Autowired
-    private OrderService orderService;
+    private OrdersService orderService;
 
     @Autowired
     private MemberService memberService;
 
-    @GetMapping("/products/category/{category}")
-    public String getProductsByCategory(@PathVariable String category, Model model) {
+    @GetMapping("/category/{category}")
+    public String getProductsByCategory(@PathVariable("category") String category, Model model) {
         List<Product> products = productService.getProductsByCategory(category);
+        for(Product p : products){
+            System.out.println(p.getName());
+        }
         model.addAttribute("products", products);
-        return "productList"; // 타임리프 템플릿 이름
+        model.addAttribute("category", category); // 카테고리 값을 모델에 추가
+        return "mall"; // 타임리프 템플릿 이름
     }
 
     @GetMapping("/products/search")
     public String searchProducts(@RequestParam String name, Model model) {
         List<Product> products = productService.searchProductsByName(name);
         model.addAttribute("products", products);
-        return "productList"; // 타임리프 템플릿 이름
+        return "mall"; // 타임리프 템플릿 이름
     }
 
     @PostMapping("/order")
@@ -47,5 +53,6 @@ public class MallController {
             return "orderError";
         }
     }
+
 
 }
