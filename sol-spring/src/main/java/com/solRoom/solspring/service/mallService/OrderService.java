@@ -1,11 +1,12 @@
 package com.solRoom.solspring.service.mallService;
 
 import com.solRoom.solspring.domain.Member;
-import com.solRoom.solspring.domain.mallDomain.Order;
-import com.solRoom.solspring.domain.mallDomain.Product;
+import com.solRoom.solspring.domain.mallDomain.Orders;
+import com.solRoom.solspring.domain.mallDomain.Products;
 import com.solRoom.solspring.repository.MemberRepository;
 import com.solRoom.solspring.repository.mallRepository.OrderRepository;
 import com.solRoom.solspring.repository.mallRepository.ProductRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,6 +15,8 @@ import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.List;
 
+
+@AllArgsConstructor
 @Service
 public class OrderService {
 
@@ -31,7 +34,7 @@ public class OrderService {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new Exception("Member not found"));
 
-        Product product = productRepository.findById(productId)
+        Products product = productRepository.findById(productId)
                 .orElseThrow(() -> new Exception("Product not found"));
 
         BigDecimal price = product.getPrice();
@@ -44,7 +47,7 @@ public class OrderService {
         member.setCredit(credit.subtract(price));
         memberRepository.save(member);
 
-        Order order = Order.builder()
+        Orders order = Orders.builder()
                 .member(member)
                 .product(product)
                 .orderDate(new Timestamp(System.currentTimeMillis()))
@@ -54,7 +57,7 @@ public class OrderService {
         orderRepository.save(order);
     }
 
-    public List<Order> getOrdersByMember(Long memberId) {
+    public List<Orders> getOrdersByMember(Long memberId) {
         return orderRepository.findByMemberId(memberId);
     }
 }

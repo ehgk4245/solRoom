@@ -1,35 +1,34 @@
 package com.solRoom.solspring.domain.mallDomain;
 
+import com.solRoom.solspring.domain.Member;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.math.BigDecimal;
+import java.sql.Timestamp;
+
 @Builder
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Product {
+public class Orders {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private String name;
+    @ManyToOne
+    private Member member;
+
+    @ManyToOne
+    private Products product;
 
     @Column(nullable = false)
-    private String description;
+    private Timestamp orderDate;
 
     @Column(nullable = false)
-    private String category;
-
-    @Column(nullable = false)
-    private String imageUrl;
-
-    @Column(nullable = false, precision = 10, scale = 2)
-    private BigDecimal price;
+    private String deliveryAddress;
 
 }

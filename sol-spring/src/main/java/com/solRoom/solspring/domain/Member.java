@@ -7,6 +7,7 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -42,4 +43,5 @@ public class Member {
 
     @Column( precision = 10, scale = 2)
     private BigDecimal credit;
+
 }

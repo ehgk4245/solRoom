@@ -1,15 +1,18 @@
 package com.solRoom.solspring.controller.mallController;
 
-import com.solRoom.solspring.domain.mallDomain.Product;
+import com.solRoom.solspring.domain.mallDomain.Products;
 import com.solRoom.solspring.service.MemberService;
 import com.solRoom.solspring.service.mallService.OrderService;
 import com.solRoom.solspring.service.mallService.ProductService;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
+@AllArgsConstructor
 @Controller
 @RequestMapping("/mall")
 public class MallController {
@@ -23,16 +26,16 @@ public class MallController {
     @Autowired
     private MemberService memberService;
 
-    @GetMapping("/products/category/{category}")
+    @GetMapping("/category/{category}")
     public String getProductsByCategory(@PathVariable String category, Model model) {
-        List<Product> products = productService.getProductsByCategory(category);
+        List<Products> products = productService.getProductsByCategory(category);
         model.addAttribute("products", products);
-        return "productList"; // 타임리프 템플릿 이름
+        return "redirect:";
     }
 
     @GetMapping("/products/search")
     public String searchProducts(@RequestParam String name, Model model) {
-        List<Product> products = productService.searchProductsByName(name);
+        List<Products> products = productService.searchProductsByName(name);
         model.addAttribute("products", products);
         return "productList"; // 타임리프 템플릿 이름
     }
