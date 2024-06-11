@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <link rel="stylesheet" type="text/css" href="https://recipe1.ezmember.co.kr/static/css/bootstrap_20211222.css"/>
+    <link rel="stylesheet" type="text/css" href="https://recipe1.ezmember.co.kr/static/css/font_20230910.css"/>
+    <link rel="stylesheet" type="text/css" href="https://recipe1.ezmember.co.kr/static/css/font-awesome.min.css"/>
+    <link rel="stylesheet" type="text/css" href="https://recipe1.ezmember.co.kr/static/css/ez_recipe_20240415.css"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script type="text/javascript" src="https://recipe1.ezmember.co.kr/static/js/jquery-1.11.2.min.js"
+            charset="utf-8"></script>
+    <script type="text/javascript" src="//static.criteo.net/js/ld/publishertag.js"></script>
+    <script async src="https://securepubads.g.doubleclick.net/tag/js/gpt.js"></script>
+</head>
+
+<body>
+<!-- form 태그는 한 번만 사용 -->
+<link rel="stylesheet" type="text/css" href="https://recipe1.ezmember.co.kr/static/css/jquery.tagit.css"/>
+
+<form th:action="@{/RecipeBoard/registration}" th:object="${recipeBoard}" method="post" enctype="multipart/form-data">
+    <div class="container recipe_regi">
+        <div class="regi_center">
+            <div class="regi_title">레시피 등록</div>
+            <div class="cont_box pad_l_60">
+
+                <div id="divMainPhotoUpload" class="cont_pic2">
+                    <input type="hidden" th:field="*{mainImage}"/>
+                    <div id="divMainPhotoBox" is_over="0">
+                        <img id="mainPhotoHolder" onclick="browseMainFile()"
+                             src="https://recipe1.ezmember.co.kr/img/pic_none4.gif"
+                             style="width: 250px; height: 250px; cursor:pointer">
+                        <input type="file" id="mainPhotoFile" style="display: none;" accept="image/*"
+                               onchange="previewMainPhoto()">
+                    </div>
+                </div>
+
+                <div class="cont_line">
+                    <p class="cont_tit4">레시피 제목</p>
+                    <input type="text" th:field="*{title}" class="form-control"
+                           placeholder="예) 소고기 미역국 끓이기" style="width:610px;">
+                </div>
+                <div class="cont_line pad_b_25">
+                    <p class="cont_tit4">요리소개</p>
+                    <textarea th:field="*{intro}" class="form-control step_cont"
+                              placeholder="이 레시피의 탄생배경을 적어주세요."
+                              style="height:100px; width:610px; resize:none;"></textarea>
+                </div>
+
+                <div class="cont_line">
+                    <p class="cont_tit4">카테고리</p>
+
+                    <select th:field="*{category1}" id="cok_sq_category_4">
+                        <option th:value="0">종류별</option>
+                        <option th:value="1">밑반찬</option>
+                        <option th:value="2">메인반찬</option>
+                        <option th:value="3">국/탕</option>
+                        <option th:value="4">찌개</option>
+                        <option th:value="5">디저트</option>
+                        <option th:value="6">면/만두</option>
+                        <option th:value="7">밥/죽/떡</option>
+                        <option th:value="8">퓨전</option>
+                        <option th:value="9">김치/젓갈/장류</option>
+                        <option th:value="10">양념/소스/잼</option>
+                        <option th:value="11">양식</option>
+                        <option th:value="12">샐러드</option>
+                        <option th:value="13">스프</option>
+                        <option th:value="14">빵</option>
+                        <option th:value="15">과자</option>
+                        <option th:value="16">차/음료/술</option>
+                        <option th:value="17">기타</option>
+                    </select>
+
+                    <select th:field="*{category2}" id="cok_sq_category_2">
+                        <option th:value="0">상황별</option>
+                        <option th:value="1">일상</option>
+                        <option th:value="2">간단</option>
+                        <option th:value="3">술안주</option>
+                        <option th:value="4">다이어트</option>
+                        <option th:value="5">도시락</option>
+                        <option th:value="6">영양식</option>
+                        <option th:value="7">간식</option>
+                        <option th:value="8">야식</option>
+                        <option th:value="9">해장</option>
+                        <option th:value="10">기타</option>
+                    </select>
+
+                    <select th:field="*{category3}" id="cok_sq_category_3">
+                        <option th:value="0">재료별</option>
+                        <option th:value="1">소고기</option>
+                        <option th:value="2">돼지고기</option>
+                        <option th:value="3">닭고기</option>
+                        <option th:value="4">육류</option>
+                        <option th:value="5">채소류</option>
+                        <option th:value="6">해물류</option>
+                        <option th:value="7">달걀/유제품</option>
+                        <option th:value="8">가공식품류</option>
+                        <option th:value="9">쌀</option>
+                        <option th:value="10">밀가루</option>
+                        <option th:value="11">건어물류</option>
+                        <option th:value="12">버섯류</option>
+                        <option th:value="13">과일류</option>
+                        <option th:value="14">콩/견과류</option>
+                        <option th:value="15">곡류</option>
+                        <option th:value="16">기타</option>
+                    </select>
+
+                    <span class="guide"
+                          style="margin:-22px 0 0 146px;">분류를 바르게 설정해주시면, 이용자들이 쉽게 레시피를 검색할 수 있어요.</span>
+                </div>
+                <div class="cont_line">
+                    <p class="cont_tit4">요리정보</p>
+                    <span class="pad_l_30">시간 </span>
+                    <select name="cok_time" id="cok_time" text="요리시간">
+                        <option value="">시간</option>
+                        <option value="5">5분이내</option>
+                        <option value="10">10분이내</option>
+                        <option value="15">15분이내</option>
+                        <option value="20">20분이내</option>
+                        <option value="30">30분이내</option>
+                        <option value="60">60분이내</option>
+                        <option value="90">90분이내</option>
+                        <option value="120">2시간이내</option>
+                        <option value="999">2시간이상</option>
+                    </select>
+
+                    <span class="pad_l_30">난이도 </span>
+                    <select th:field="*{difficulty}" id="cok_degree">
+                        <option value="0">난이도</option>
+                        <option value="초급">초급</option>
+                        <option value="중급">중급</option>
+                        <option value="고급">고급</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="cont_box pad_l_60">
+                <p class="cont_tit3">재료 정보</p>
+                <span class="guide mag_b_15" style="width:100%;">재료가 남거나 부족하지 않도록 정확한 계량정보를 적어주세요.</span>
+                <div class="mag_b_25 ui-sortable" id="divMaterialGroupArea">
+                    <!-- 재료 정보 입력 필드 -->
+                    <div th:each="ingredient : ${recipeBoard.ingredients}">
+                        <input type="text" th:field="*{ingredients[__${ingredient}__.key]}" placeholder="재료 이름">
+                        <input type="text" th:field="*{ingredients[__${ingredient}__.value]}" placeholder="재료 양">
+                        <button type="button" class="deleteIngredient">삭제</button>
+                    </div>
+                </div>
+                <button type="button" id="addIngredient">재료 추가</button>
+            </div>
+
+            <div id="divStepArea">
+                <!-- 요리 단계 반복 처리 -->
+                <div th:each="cookingStep, stat : ${recipeBoard.cookingSteps}">
+                    <div class="step">
+                        <p class="cont_tit2_1" style="cursor:pointer">Step <span th:text="${stat.index + 1}"></span></p>
+
+                        <div style="display:inline-block">
+                            <textarea th:field="*{cookingSteps[__${stat.index}__].description}"
+                                      class="form-control step_cont" placeholder="조리 단계 설명"
+                                      style="height:160px; width:430px; resize:none;"></textarea>
+                        </div>
+
+                        <div style="display:inline-block">
+                            <input type="hidden" th:field="*{cookingSteps[__${stat.index}__].id}" id="step_no_STEP"
+                                   value="">
+                            <input type="hidden" th:field="*{cookingSteps[__${stat.index}__].image}" id="step_photo
+_STEP" value="">
+
+                            <div style="position:absolute;left:-3000px">
+                                <input type="file" th:field="*{cookingSteps[__${stat.index}__].image}" class="step-file"
+                                       accept="image/jpeg,image/png,image/gif"
+                                       style="display:block;width:0px;height:0px;font-size:0px;"
+                                       onchange="previewImage(this, ${stat.index})">
+                            </div>
+
+                            <div id="divStepPhotoBox_STEP_${stat.index}" is_over="0">
+                                <img src="https://recipe1.ezmember.co.kr/img/pic_none2.gif"
+                                     onclick="browseStepFile(${stat.index})" width="160" height="160"
+                                     style="cursor:pointer" id="stepImage_${stat.index}">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="btn_add mag_b_25" style="padding:0 0 20px 180px; width:820px;">
+                <button type="button" onclick="addStep()" class="btn btn-default">
+                    <span class="glyphicon glyphicon-plus-sign"></span>순서추가
+                </button>
+            </div>
+
+            <p class="cont_tit4">요리완성사진
+                <input type="file" name="file" id="multifile_2" style="display:none;" multiple/>
+            </p>
+            <div id="divWorkArea" style="display:inline-block">
+                <div class="complete_pic">
+                    <input type="hidden" th:field="*{dishImage[0]}" id="work_photo_1" value="">
+                    <div style="position:absolute;left:-3000px">
+                        <input type="file" id="q_work_file_1" accept="image/jpeg,image/png,image/gif"
+                               style="display:;width:0px;height:0px;font-size:0px;"
+                               onchange="previewDishImage(this, 0)">
+                    </div>
+                    <div id="divWorkPhotoBox_1" is_over="0">
+                        <a href="#" class="pic_del" style="display:none"></a>
+                        <img id="workPhotoHolder_1" onclick="browseWorkFile(1)"
+                             src="https://recipe1.ezmember.co.kr/img/pic_none3.gif" alt="No Image"
+                             style="width: 140px; height: 140px; cursor:pointer">
+                    </div>
+                </div>
+
+                <div class="complete_pic">
+                    <input type="hidden" th:field="*{dishImage[1]}" id="work_photo_2" value="">
+                    <div style="position:absolute;left:-3000px">
+                        <input type="file" id="q_work_file_2" accept="image/jpeg,image/png,image/gif"
+                               style="display:;width:0px;height:0px;font-size:0px;"
+                               onchange="previewDishImage(this, 1)">
+                    </div>
+                    <div id="divWorkPhotoBox_2" is_over="0">
+                        <a href="#" class="pic_del" style="display:none"></a>
+                        <img id="workPhotoHolder_2" onclick="browseWorkFile(2)"
+                             src="https://recipe1.ezmember.co.kr/img/pic_none3.gif" alt="No Image"
+                             style="width: 140px; height: 140px; cursor:pointer">
+                    </div>
+                </div>
+
+                <div class="complete_pic">
+                    <input type="hidden" th:field="*{dishImage[2]}" id="work_photo_3" value="">
+                    <div style="position:absolute;left:-3000px">
+                        <input type="file" id="q_work_file_3" accept="image/jpeg,image/png,image/gif"
+                               style="display:;width:0px;height:0px;font-size:0px;"
+                               onchange="previewDishImage(this, 2)">
+                    </div>
+                    <div id="divWorkPhotoBox_3" is_over="0">
+                        <a href="#" class="pic_del" style="display:none"></a>
+                        <img id="workPhotoHolder_3" onclick="browseWorkFile(3)"
+                             src="https://recipe1.ezmember.co.kr/img/pic_none3.gif" alt="No Image"
+                             style="width: 140px; height: 140px; cursor:pointer">
+                    </div>
+                </div>
+
+                <div class="complete_pic">
+                    <input type="hidden" th:field="*{dishImage[3]}" id="work_photo_4" value="">
+                    <div style="position:absolute;left:-3000px">
+                        <input type="file" id="q_work_file_4" accept="image/jpeg,image/png,image/gif"
+                               style="display:;width:0px;height:0px;font-size:0px;"
+                               onchange="previewDishImage(this, 3)">
+                    </div>
+                    <div id="divWorkPhotoBox_4" is_over="0">
+                        <a href="#" class="pic_del" style="display:none"></a>
+                        <img id="workPhotoHolder_4" onclick="browseWorkFile(4)"
+                             src="https://recipe1.ezmember.co.kr/img/pic_none3.gif" alt="No Image"
+                             style="width: 140px; height: 140px; cursor:pointer">
+                    </div>
+                </div>
+            </div>
+
+            <!--/cont_box-->
+
+        </div>
+
+        <div class="regi_btm">
+            <button type="submit">작성 완료</button>
+        </div>
+    </div><!-- /container -->
+</form>
+
+
+<input type="hidden" name="isRestrict" value="false"/>
+
+<div class="footer">
+
+
+</div>
+
+
+<script type="text/javascript" src="https://recipe1.ezmember.co.kr/static/js/jquery-ui-1.11.4.js"
+        charset="utf-8"></script>
+<script type="text/javascript" src="https://recipe1.ezmember.co.kr/static/js/tag-it.min.js" charset="utf-8"></script>
+<script type="text/javascript" src="https://recipe1.ezmember.co.kr/static/js/ez_dialog.min_20160430.js"
+        charset="utf-8"></script>
+<script type="text/javascript" src="https://recipe1.ezmember.co.kr/static/js/coreutil.min_20170112.js"
+        charset="utf-8"></script>
+<script type="text/javascript" src="https://recipe1.ezmember.co.kr/static/js/ui.min_20150609.js"
+        charset="utf-8"></script>
+
+
+<script>
+
+    function browseMainFile() {
+        document.getElementById('mainPhotoFile').click();
+    }
+
+    function previewMainPhoto() {
+        var file = document.getElementById('mainPhotoFile').files[0];
+        if (file) {
+           var reader = new FileReader();
+           reader.onload = function(e) {
+               document.getElementById('mainPhotoHolder').src = e.target.result;
+           }
+           reader.readAsDataURL(file);
+        }
+    }
+
+    function addIngredient(event) {
+    event.preventDefault(); // 기본 동작 중지
+    var ingredientHTML = '<div class="ingredient">' +
+                            '<input type="text" placeholder="재료 이름">' +
+                            '<input type="text" placeholder="재료 양">' +
+                            '<button class="deleteIngredient">삭제</button>' +
+                         '</div>';
+    $('#divMaterialGroupArea').append(ingredientHTML);
+}
+
+$(document).on('click', '#addIngredient', addIngredient);
+
+// 삭제 버튼 클릭 시
+$(document).on('click', '.deleteIngredient', function() {
+    $(this).parent('.ingredient').remove();
+});
+<!----------------------------------------<addStep>------------------------------------------------------------->
+function addStep() {
+    var newIndex = $(".step").length;
+
+    var newStep = '<div class="step">' +
+        '<p class="cont_tit2_1" style="cursor:pointer">Step ' + (newIndex + 1) + '</p>' +
+        '<div style="display:inline-block">' +
+        '<textarea class="form-control step_cont" placeholder="조리 단계 설명" style="height:160px; width:430px; resize:none;" th:field="*{cookingSteps[' + newIndex + '].description}"></textarea>' +
+        '</div>' +
+        '<div style="display:inline-block">' +
+        '<input type="hidden" id="step_no_STEP_' + newIndex + '" th:field="*{cookingSteps[' + newIndex + '].id}" value="">' +
+        '<input type="hidden" id="step_photo_STEP_' + newIndex + '" th:field="*{cookingSteps[' + newIndex + '].image}" value="">' +
+        '<div style="position:absolute;left:-3000px">' +
+        '<input type="file" class="step-file" th:field="*{cookingSteps[' + newIndex + '].image}" accept="image/jpeg,image/png,image/gif" style="display:block;width:0px;height:0px;font-size:0px;" onchange="previewImage(this, ' + newIndex + ')">' +
+        '</div>' +
+        '<div id="divStepPhotoBox_STEP_' + newIndex + '" is_over="0">' +
+        '<img src="https://recipe1.ezmember.co.kr/img/pic_none2.gif" onclick="browseStepFile(' + newIndex + ')" width="160" height="160" style="cursor:pointer" id="stepImage_' + newIndex + '">' +
+        '</div>' +
+        '</div>' +
+        '<div class="step_btn" style="display:none;">' +
+        '<a href="javascript:void(0)"><span class="glyphicon glyphicon-chevron-up moveUp"></span></a>' +
+        '<a href="javascript:void(0)"><span class="glyphicon glyphicon-chevron-down moveDown"></span></a>' +
+        '<a href="javascript:void(0)" class="adjustStep"><b>맞춤</b></a>' +
+        '<a href="javascript:void(0)" class="addStep"><span class="glyphicon glyphicon-plus"></span></a>' +
+        '<a href="javascript:void(0)" class="delStep"><span class="glyphicon glyphicon-remove"></span></a>' +
+        '</div>' +
+        '</div>';
+
+    $("#divStepArea").append(newStep);
+}
+
+function browseStepFile(index) {
+    $(".step-file").eq(index).click();
+}
+function previewImage(input, index) {
+    if (input.files && input.files[0]) {
+        var reader = new FileReader();
+        reader.onload = function(e) {
+            $('#stepImage_' + index).attr('src', e.target.result);
+        }
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+
+<!-------------------------dishImage-------------------------------->
+
+function browseWorkFile(index) {
+    document.getElementById('q_work_file_' + index).click();
+}
+
+function previewDishImage(input, index) {
+    if (input.files && input.files[0]) {
+        var reader = new FileReader();
+        reader.onload = function(e) {
+            document.getElementById('workPhotoHolder_' + (index + 1)).src = e.target.result;
+        }
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+
+
+</script>
+
+
+</body>
+</html>
