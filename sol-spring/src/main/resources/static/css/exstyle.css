@@ -129,3 +129,12 @@ body {
     border: 1px solid transparent;
     border-radius: 5px;
 }
+.dropdown-menu {
+    display: none;
+    margin-top: 0; /* 필요에 따라 margin을 조정할 수 있습니다 */
+}
+
+/* 드롭다운 메뉴를 포함하는 요소가 호버될 때 드롭다운 메뉴를 표시 */
+.dropdown:hover .dropdown-menu {
+    display: block;
+}

@@ -2,26 +2,45 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>물건 등록</title>
-    <link rel="stylesheet" th:href="@{/css/style.css}" />
+    <link rel="stylesheet" th:href="@{/css/registrationForm.css}" />
+    <div class="container">
+        <div class="logo" onclick="location.href='/'">
+            <h1>SoL Room</h1>
+        </div>
+
+        <div class="menu">
+            <h2>물건등록</h2>
+        </div>
+    </div>
 </head>
+
 <body>
-<h1>물건 등록</h1>
 <form th:action="@{/barterBoard/registration}" th:object="${barterBoard}" method="post" enctype="multipart/form-data">
     <div>
         <label for="category">카테고리</label>
+        <br>
+
         <select id="category" th:field="*{category}" class="form-select" aria-label="Default select example">
             <option value="" selected>카테고리를 선택하세요</option>
-            <option value="CATEGORY1">카테고리 1</option>
-            <option value="CATEGORY2">카테고리 2</option>
-            <option value="CATEGORY3">카테고리 3</option>
+            <option value="CATEGORY1">의류</option>
+            <option value="CATEGORY2">뷰티</option>
+            <option value="CATEGORY3">모바일/태블릿</option>
+            <option value="CATEGORY4">가전제품</option>
+            <option value="CATEGORY5">가구/인테리어</option>
+            <option value="CATEGORY6">노트북/pc</option>
+            <option value="CATEGORY7">게임</option>
+            <option value="CATEGORY8">스포츠</option>
+            <option value="CATEGORY9">공구</option>
         </select>
         <div th:if="${#fields.hasErrors('category')}" th:errors="*{category}"></div>
     </div>
+    <br>
     <div>
         <label for="productName">물건 이름</label>
         <input type="text" id="productName" th:field="*{productName}" />
         <div th:if="${#fields.hasErrors('productName')}" th:errors="*{productName}"></div>
     </div>
+    <br>
     <div>
         <label for="content">내용</label>
         <textarea id="content" th:field="*{content}"></textarea>
@@ -34,6 +53,7 @@
             <option value="EXCHANGE">교환</option>
         </select>
     </div>
+    <br>
     <div>
         <label for="itemCondition">물건 상태</label>
         <select id="itemCondition" th:field="*{itemCondition}">
@@ -45,6 +65,7 @@
         <label for="priceRange">가격대</label>
         <input type="text" id="priceRange" th:field="*{priceRange}" />
     </div>
+    <br>
     <div class="form-group">
         <label for="files">이미지 업로드:</label>
         <div id="image-upload-container">
@@ -55,6 +76,7 @@
         </div>
         <div th:if="${#fields.hasErrors('imageUrls')}" th:errors="*{imageUrls}"></div>
     </div>
+    <br>
     <div>
         <label for="location">거래 장소</label>
         <input type="text" id="location" th:field="*{location}" />
