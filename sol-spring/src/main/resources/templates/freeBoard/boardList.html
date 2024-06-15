@@ -3,14 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <div class="logo" onclick="location.href='/'">
-        <h1>SoL Room</h1>
-    </div>
+
     <title>게시판 목록</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
+            background-color: #fff;
             margin: 0;
             padding: 0;
         }
@@ -98,12 +96,12 @@
         .back-button button:hover {
             background-color: #0056b3;
         }
-        .logo {
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 1000;
-    cursor: pointer;
+        .logo img {
+            margin-left: 10px;
+            width: 100px;
+            height: auto;
+            cursor: pointer;
+        }
 }
 
 .logo h1 {
@@ -125,11 +123,12 @@
     </style>
 </head>
 <body>
-
+<div class="logo" onclick="location.href='/'">
+    <div><a href="/"><img src="/album/logo.jpg"></a></div>
+</div>
 <div class="back-button">
     <div class="button-wrapper">
-    <a th:href="@{'../freeBoard/saveForm'}">글쓰기</a>
-    <button onclick="window.location.href='/'">뒤로 가기</button>
+    <a th:href="@{'../freeBoard/saveForm'}">글 쓰기</a>
 </div>
 
 
