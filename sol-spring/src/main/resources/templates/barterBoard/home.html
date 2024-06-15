@@ -52,12 +52,14 @@
     <div class="user">
         <div class="left">
 
-            <img src="/album/logo.jpg" alt="Logo" class="logo">
-            <h1>Sol Room</h1>
+            <a href="/">
+                <img src="/album/logo.jpg" alt="Logo" class="logo">
+            </a>
+
         </div>
         <div class="right">
-            <a href="#">로그아웃</a>
-            <a href="#">마이페이지</a>
+            <a th:href="@{/logout}" sec:authorize="isAuthenticated()">로그아웃</a>
+            <a th:href="@{/myPage}">마이페이지</a>
         </div>
     </div>
     <p>

@@ -60,7 +60,14 @@ body {
     margin-left: 10px;
     width: 100px;
     height: auto;
+    cursor: pointer;
 }
+.logo img {
+            margin-left: 10px;
+            width: 100px;
+            height: auto;
+            cursor: pointer;
+        }
 
 .user-options {
     background-color: white;
