@@ -3,7 +3,7 @@ package com.solRoom.solspring.service;
 import com.solRoom.solspring.controller.dto.BoardImageUploadDTO;
 import com.solRoom.solspring.controller.dto.FreeBoardDTO;
 import com.solRoom.solspring.domain.BoardType;
-import com.solRoom.solspring.domain.FreeBoard;
+import com.solRoom.solspring.domain.freeBoard.FreeBoard;
 import com.solRoom.solspring.domain.ImageOfBoard;
 import com.solRoom.solspring.domain.Member;
 import com.solRoom.solspring.repository.FreeBoardRepository;

@@ -1,9 +1,9 @@
 package com.solRoom.solspring.controller.dto;
 
 import com.solRoom.solspring.domain.BoardType;
-import com.solRoom.solspring.domain.CookingStep;
+import com.solRoom.solspring.domain.recipeBoard.CookingStep;
 import com.solRoom.solspring.domain.Member;
-import com.solRoom.solspring.domain.RecipeBoard;
+import com.solRoom.solspring.domain.recipeBoard.RecipeBoard;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -11,7 +11,6 @@ import lombok.NoArgsConstructor;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;

@@ -1,8 +1,6 @@
 package com.solRoom.solspring.service;
 
 import com.solRoom.solspring.controller.dto.BoardImageUploadDTO;
-import com.solRoom.solspring.controller.dto.FreeBoardDTO;
-import com.solRoom.solspring.domain.FreeBoard;
 import com.solRoom.solspring.domain.Member;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

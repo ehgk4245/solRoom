@@ -1,5 +1,8 @@
-package com.solRoom.solspring.domain;
+package com.solRoom.solspring.domain.recipeBoard;
 
+import com.solRoom.solspring.domain.BoardType;
+import com.solRoom.solspring.domain.Member;
+import com.solRoom.solspring.domain.recipeBoard.CookingStep;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -8,7 +11,6 @@ import lombok.NoArgsConstructor;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 

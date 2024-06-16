@@ -1,20 +1,18 @@
 package com.solRoom.solspring.service;
 
 import com.solRoom.solspring.controller.dto.FreeBoardReplyDTO;
-import com.solRoom.solspring.domain.FreeBoard;
-import com.solRoom.solspring.domain.FreeBoardReply;
+import com.solRoom.solspring.domain.freeBoard.FreeBoard;
+import com.solRoom.solspring.domain.freeBoard.FreeBoardReply;
 import com.solRoom.solspring.domain.Member;
 import com.solRoom.solspring.repository.FreeBoardReplyRepository;
 import com.solRoom.solspring.repository.FreeBoardRepository;
 import com.solRoom.solspring.repository.MemberRepository;
 import lombok.AllArgsConstructor;
-import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service

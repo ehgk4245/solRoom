@@ -1,8 +1,7 @@
 package com.solRoom.solspring.controller.dto;
 
-import com.solRoom.solspring.domain.BarterBoard;
 import com.solRoom.solspring.domain.BoardType;
-import com.solRoom.solspring.domain.FreeBoard;
+import com.solRoom.solspring.domain.freeBoard.FreeBoard;
 import com.solRoom.solspring.domain.Member;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

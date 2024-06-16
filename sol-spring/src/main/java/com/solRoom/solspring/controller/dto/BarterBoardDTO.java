@@ -1,11 +1,10 @@
 package com.solRoom.solspring.controller.dto;
 
-import com.solRoom.solspring.domain.BarterBoard;
+import com.solRoom.solspring.domain.barterBoard.BarterBoard;
 import com.solRoom.solspring.domain.BoardType;
-import com.solRoom.solspring.domain.Category;
 import com.solRoom.solspring.domain.Member;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -27,8 +26,8 @@ public class BarterBoardDTO {
     private int viewCount;
     private String boardType;
 
-    @NotBlank(message = "카테고리를 선택해주세요")
-    private String category;
+    @NotNull(message = "카테고리를 선택해주세요")
+    private Long category;
 
     @NotBlank(message = "상품명을 입력해주세요")
     @Size(max = 30, message = "최대 30글자로 입력해주세요")
@@ -51,7 +50,7 @@ public class BarterBoardDTO {
     private String location;
     private Timestamp createDate;
 
-    public BarterBoard toEntity(Member member,Category category){
+    public BarterBoard toEntity(Member member){
         return BarterBoard.builder()
                 .id(id)
                 .member(member)
@@ -79,7 +78,7 @@ public class BarterBoardDTO {
                 .nickName(barterBoard.getMember().getNickname())
                 .viewCount(barterBoard.getViewCount())
                 .boardType(barterBoard.getBoardType().toString()) // Convert Enum to String
-                .category(barterBoard.getCategory().getName())
+                .category(barterBoard.getCategory())
                 .productName(barterBoard.getProductName())
                 .content(barterBoard.getContent())
                 .tradeType(barterBoard.getTradeType().toString()) // Convert Enum to String

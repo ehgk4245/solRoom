@@ -1,12 +1,11 @@
 package com.solRoom.solspring.service;
 
-import com.solRoom.solspring.controller.dto.BarterBoardDTO;
 import com.solRoom.solspring.controller.dto.BoardImageUploadDTO;
 import com.solRoom.solspring.controller.dto.RecipeBoardDTO;
 import com.solRoom.solspring.domain.*;
+import com.solRoom.solspring.domain.recipeBoard.RecipeBoard;
 import com.solRoom.solspring.repository.ImageOfBoardRepository;
 import com.solRoom.solspring.repository.RecipeBoardRepository;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

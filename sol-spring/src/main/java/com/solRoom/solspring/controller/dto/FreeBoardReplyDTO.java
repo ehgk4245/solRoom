@@ -1,8 +1,8 @@
 package com.solRoom.solspring.controller.dto;
 
-import com.solRoom.solspring.domain.FreeBoard;
+import com.solRoom.solspring.domain.freeBoard.FreeBoard;
 import com.solRoom.solspring.domain.Member;
-import com.solRoom.solspring.domain.FreeBoardReply;
+import com.solRoom.solspring.domain.freeBoard.FreeBoardReply;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
