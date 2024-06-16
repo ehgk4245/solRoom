@@ -9,46 +9,38 @@
     <title>게시판</title>
 </head>
 <body>
-
 <div class="user-options">
-
     <ul class="nav justify-content-center">
-        <div class="dropdown">
-            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                카테고리
-            </button>
-            <ul class="dropdown-menu dropdown-menu-dark">
-                <li><a class="dropdown-item active" href="#">의류</a></li>
-                <li><a class="dropdown-item" href="#">뷰티</a></li>
-                <li><a class="dropdown-item" href="#">모바일/태블릿</a></li>
-                <li><a class="dropdown-item" href="#">가전제품</a></li>
-                <li><a class="dropdown-item" href="#">가구/인테리어</a></li>
-                <li><a class="dropdown-item" href="#">노트북/pc</a></li>
-                <li><a class="dropdown-item" href="#">게임</a></li>
-                <li><a class="dropdown-item" href="#">스포츠</a></li>
-                <li><a class="dropdown-item" href="#">농구</a></li>
-            </ul>
-        </div>
         <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="#">물물교환</a>
+            <a class="nav-link active" aria-current="page" href="/barterBoard">물물교환</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="#">음식 레시피</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="#">자취방 리뷰</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="true">인테리어</a>
+            <a class="nav-link" href="/RecipeBoard/">음식 레시피</a>
         </li>
 
     </ul>
 
 </div>
+
 <header>
     <div class="menu">
         <h2>물물교환</h2>
     </div>
+    <button class="btn btn-outline-secondary dropdown-toggle" type="button"
+            data-bs-toggle="dropdown" aria-expanded="false">카테고리 선택
+    </button>
+    <ul class="dropdown-menu">
+        <li><a class="dropdown-item" href="/barterBoard/category/1">의류</a></li>
+        <li><a class="dropdown-item" href="/barterBoard/category/2">뷰티</a></li>
+        <li><a class="dropdown-item" href="/barterBoard/category/3">모바일/태블릿</a></li>
+        <li><a class="dropdown-item" href="/barterBoard/category/4">가전제품</a></li>
+        <li><a class="dropdown-item" href="/barterBoard/category/5">가구/인테리어</a></li>
+        <li><a class="dropdown-item" href="/barterBoard/category/6">노트북/pc</a></li>
+        <li><a class="dropdown-item" href="/barterBoard/category/7">게임</a></li>
+        <li><a class="dropdown-item" href="/barterBoard/category/8">스포츠</a></li>
+        <li><a class="dropdown-item" href="/barterBoard/category/9">공구</a></li>
+        <li><a class="dropdown-item" href="/barterBoard/category/10">기타</a></li>
+    </ul>
     <div class="user">
         <div class="left">
 

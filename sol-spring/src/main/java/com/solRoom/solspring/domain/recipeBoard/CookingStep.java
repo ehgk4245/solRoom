@@ -1,4 +1,4 @@
-package com.solRoom.solspring.domain;
+package com.solRoom.solspring.domain.recipeBoard;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

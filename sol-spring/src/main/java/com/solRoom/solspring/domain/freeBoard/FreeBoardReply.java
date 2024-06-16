@@ -1,6 +1,8 @@
-package com.solRoom.solspring.domain;
+package com.solRoom.solspring.domain.freeBoard;
 
 
+import com.solRoom.solspring.domain.Member;
+import com.solRoom.solspring.domain.freeBoard.FreeBoard;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

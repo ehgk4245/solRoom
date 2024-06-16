@@ -1,13 +1,11 @@
 package com.solRoom.solspring.controller.dto;
 
-import com.solRoom.solspring.domain.CookingStep;
-import com.solRoom.solspring.domain.RecipeBoard;
+import com.solRoom.solspring.domain.recipeBoard.CookingStep;
+import com.solRoom.solspring.domain.recipeBoard.RecipeBoard;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.List;
 
 @Builder
 @Data

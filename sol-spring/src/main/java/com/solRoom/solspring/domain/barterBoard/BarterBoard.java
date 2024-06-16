@@ -1,5 +1,7 @@
-package com.solRoom.solspring.domain;
+package com.solRoom.solspring.domain.barterBoard;
 
+import com.solRoom.solspring.domain.BoardType;
+import com.solRoom.solspring.domain.Member;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -27,9 +29,8 @@ public class BarterBoard {
     @Enumerated(EnumType.STRING)
     private BoardType boardType;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "categoryId", nullable = false)
-    private Category category;
+    @Column(nullable = false)
+    private Long category;
 
     @Column(nullable = false)
     private String productName;

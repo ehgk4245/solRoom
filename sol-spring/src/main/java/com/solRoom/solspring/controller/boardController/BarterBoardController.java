@@ -1,4 +1,4 @@
-package com.solRoom.solspring.controller;
+package com.solRoom.solspring.controller.boardController;
 
 import com.solRoom.solspring.config.auth.CustomUserDetails;
 import com.solRoom.solspring.controller.dto.BarterBoardDTO;

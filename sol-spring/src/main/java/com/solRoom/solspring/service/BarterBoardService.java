@@ -2,10 +2,9 @@ package com.solRoom.solspring.service;
 
 import com.solRoom.solspring.controller.dto.BarterBoardDTO;
 import com.solRoom.solspring.controller.dto.BoardImageUploadDTO;
-import com.solRoom.solspring.controller.dto.FreeBoardDTO;
 import com.solRoom.solspring.domain.*;
+import com.solRoom.solspring.domain.barterBoard.BarterBoard;
 import com.solRoom.solspring.repository.BarterBoardRepository;
-import com.solRoom.solspring.repository.CategoryRepository;
 import com.solRoom.solspring.repository.ImageOfBoardRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,8 +30,6 @@ public class BarterBoardService implements BoardService<BarterBoard, BarterBoard
     @Autowired
     private final ImageOfBoardRepository imageOfBoardRepository;
 
-    @Autowired
-    private CategoryRepository categoryRepository;
 
     @Value("${file.boardImagePath}")
     private String uploadFolder;
@@ -40,15 +37,8 @@ public class BarterBoardService implements BoardService<BarterBoard, BarterBoard
     @Override
     @Transactional
     public void savePost(BarterBoardDTO boardDTO, BoardImageUploadDTO boardImageUploadDTO, Member member) {
-        Category category = categoryRepository.findByName(boardDTO.getCategory());
-        // 카테고리가 존재하지 않으면 새로 생성하고 저장
-        if (category == null) {
-            category = new Category();
-            category.setName(boardDTO.getCategory());
-            category = categoryRepository.save(category);
-        }
 
-        BarterBoard board = boardDTO.toEntity(member,category);
+        BarterBoard board = boardDTO.toEntity(member);
         boardRepository.save(board);
 
         Long id = board.getId();
@@ -128,7 +118,7 @@ public class BarterBoardService implements BoardService<BarterBoard, BarterBoard
 
 
     public Page<BarterBoardDTO> findByCategoryId(Long categoryId, Pageable pageable) {
-        Page<BarterBoard> boardPage = boardRepository.findByCategoryId(categoryId, pageable);
+        Page<BarterBoard> boardPage = boardRepository.findByCategory(categoryId, pageable);
         return boardPage.map(BarterBoardDTO::fromEntity);
     }
 
