@@ -137,16 +137,18 @@
             <div class="cont_box pad_l_60">
                 <p class="cont_tit3">재료 정보</p>
                 <span class="guide mag_b_15" style="width:100%;">재료가 남거나 부족하지 않도록 정확한 계량정보를 적어주세요.</span>
-                <div class="mag_b_25 ui-sortable" id="divMaterialGroupArea">
+                <div class="mag_b_25 ui-sortable" id="divMaterialGroupArea" th:each="ingredient, iterStat : *{ingredients}">
                     <!-- 재료 정보 입력 필드 -->
-                    <div th:each="ingredient : ${recipeBoard.ingredients}">
-                        <input type="text" th:field="*{ingredients[__${ingredient}__.key]}" placeholder="재료 이름">
-                        <input type="text" th:field="*{ingredients[__${ingredient}__.value]}" placeholder="재료 양">
+                    <div>
+                        <input type="text" th:field="*{ingredients[__${iterStat.index}__].name}" placeholder="재료명" required />
+                        <input type="text" th:field="*{ingredients[__${iterStat.index}__].amt}" placeholder="양" required />
                         <button type="button" class="deleteIngredient">삭제</button>
                     </div>
                 </div>
                 <button type="button" id="addIngredient">재료 추가</button>
             </div>
+
+
 
             <div id="divStepArea">
                 <!-- 요리 단계 반복 처리 -->
@@ -272,7 +274,7 @@ _STEP" value="">
 
 </div>
 
-
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script type="text/javascript" src="https://recipe1.ezmember.co.kr/static/js/jquery-ui-1.11.4.js"
         charset="utf-8"></script>
 <script type="text/javascript" src="https://recipe1.ezmember.co.kr/static/js/tag-it.min.js" charset="utf-8"></script>
@@ -300,23 +302,57 @@ _STEP" value="">
            reader.readAsDataURL(file);
         }
     }
+ document.addEventListener('DOMContentLoaded', function() {
+        // 재료 추가 버튼 클릭 시 처리
+        document.getElementById('addIngredient').addEventListener('click', function() {
+            var ingredientArea = document.getElementById('divMaterialGroupArea');
+            if (ingredientArea) {
+                var index = ingredientArea.children.length; // 현재 재료 입력 항목 개수
 
-    function addIngredient(event) {
-    event.preventDefault(); // 기본 동작 중지
-    var ingredientHTML = '<div class="ingredient">' +
-                            '<input type="text" placeholder="재료 이름">' +
-                            '<input type="text" placeholder="재료 양">' +
-                            '<button class="deleteIngredient">삭제</button>' +
-                         '</div>';
-    $('#divMaterialGroupArea').append(ingredientHTML);
+                // 새로운 재료 입력 필드 생성
+                var newIngredientDiv = document.createElement('div');
+                newIngredientDiv.innerHTML = `
+                    <input type="text" name="ingredients[${index}].name" placeholder="재료명" required />
+                    <input type="text" name="ingredients[${index}].amt" placeholder="양" required />
+                    <button type="button" class="deleteIngredient">삭제</button>
+                `;
+                ingredientArea.appendChild(newIngredientDiv);
+
+                // 삭제 버튼 클릭 시 처리
+                newIngredientDiv.querySelector('.deleteIngredient').addEventListener('click', function() {
+                    ingredientArea.removeChild(newIngredientDiv);
+                    updateIngredientIndices(); // 인덱스 업데이트
+                });
+
+                updateIngredientIndices(); // 인덱스 업데이트
+            }
+        });
+    });
+
+    // 재료 입력 필드 인덱스 업데이트 함수
+    function updateIngredientIndices() {
+        var ingredientInputs = document.querySelectorAll('#divMaterialGroupArea input[type="text"][name^="ingredients"]');
+        ingredientInputs.forEach(function(input, index) {
+            input.name = `ingredients[${index}].${input.getAttribute('name').split('.')[1]}`;
+        });
+    }
+
+
+// 재료 입력 필드 인덱스 업데이트 함수
+function updateIngredientIndices() {
+    var ingredientInputs = document.querySelectorAll('#divMaterialGroupArea input[type="text"][name^="ingredients"]');
+    ingredientInputs.forEach(function(input, index) {
+        input.name = `ingredients[${index}].${input.getAttribute('name').split('.')[1]}`;
+    });
 }
 
-$(document).on('click', '#addIngredient', addIngredient);
 
-// 삭제 버튼 클릭 시
-$(document).on('click', '.deleteIngredient', function() {
-    $(this).parent('.ingredient').remove();
-});
+
+
+
+
+
+
 <!----------------------------------------<addStep>------------------------------------------------------------->
 function addStep() {
     var newIndex = $(".step").length;

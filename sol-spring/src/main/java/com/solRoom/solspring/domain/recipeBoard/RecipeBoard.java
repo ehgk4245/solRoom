@@ -12,7 +12,6 @@ import lombok.NoArgsConstructor;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 @Builder
 @Data
@@ -60,10 +59,9 @@ public class RecipeBoard {
     private byte[] mainImage;   // 대표 사진
 
     @ElementCollection
-    @CollectionTable(name = "recipe_ingredients", joinColumns = @JoinColumn(name = "recipe_id"))
-    @MapKeyColumn(name = "ingredient_name")
-    @Column(name = "ingredient_amount")
-    private Map<String, String> ingredients;
+    @Column
+    private List<Ingredient> ingredients = new ArrayList<>();
+
 
     @OneToMany(mappedBy = "recipeBoard", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CookingStep> cookingSteps = new ArrayList<>();
@@ -79,10 +77,5 @@ public class RecipeBoard {
     public enum Difficulty {
         초급, 중급, 고급
     }
-
-
-
-
-
 
 }

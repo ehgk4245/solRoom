@@ -3,6 +3,7 @@ package com.solRoom.solspring.controller.dto;
 import com.solRoom.solspring.domain.BoardType;
 import com.solRoom.solspring.domain.recipeBoard.CookingStep;
 import com.solRoom.solspring.domain.Member;
+import com.solRoom.solspring.domain.recipeBoard.Ingredient;
 import com.solRoom.solspring.domain.recipeBoard.RecipeBoard;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,7 +13,6 @@ import lombok.NoArgsConstructor;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @Builder
@@ -33,7 +33,7 @@ public class RecipeBoardDTO {
     private Long memberId;
     private String difficulty;
     private byte[] mainImage;
-    private Map<String, String> ingredients;     // 기본 값 초기화
+    private List<Ingredient>ingredients;
     private List<CookingStepDTO> cookingSteps = new ArrayList<>(); // 기본 값 초기화
     private List<String> dishImage = new ArrayList<>(); // 기본 값 초기화
 
@@ -52,7 +52,7 @@ public class RecipeBoardDTO {
                 .difficulty(RecipeBoard.Difficulty.valueOf(difficulty))
                 .mainImage(mainImage)
                 .createDate(createDate)
-                .ingredients(ingredients)
+                .ingredients(new ArrayList<>())
 //                .dishImage(dishImage)
                 .build();
 
